@@ -70,8 +70,11 @@ const EditModal = ({
   const numberPropValue = Number(propValue);
   const numberValue = Number(value);
   const onSaveCallback = useCallback(
-    () => onSave(`${numberPropValue + numberValue}`),
-    [numberPropValue, numberValue, onSave],
+    () =>
+      onSave(
+        type === ModalState.SCORE ? `${numberPropValue + numberValue}` : value,
+      ),
+    [numberPropValue, numberValue, onSave, type, value],
   );
 
   const [selectTextOnFocus, setSelectTextOnFocus] = useState(true);
@@ -187,7 +190,7 @@ const EditModal = ({
                 {Math.abs(numberValue)} = {numberPropValue + numberValue}
               </Text>
               <TouchableOpacity
-                style={style.extraButton}
+                style={style.extraButtonOutline}
                 onPress={invertValue}
                 accessibilityLabel="Invert value"
                 accessibilityHint="Multiply the score by -1"

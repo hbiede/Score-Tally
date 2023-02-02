@@ -8,6 +8,7 @@ type Styles = {
   errorContainer: StrViewStyle;
   errorText: StrTextStyle;
   extraButton: StrViewStyle;
+  extraButtonOutline: StrViewStyle;
   headerButton: StrTextStyle;
   headerButtonContainer: StrViewStyle;
   headerRow: StrViewStyle;
@@ -28,19 +29,19 @@ export default (theme: ThemeType): Styles => {
     modalContainer: {
       alignItems: 'center',
       backgroundColor: theme.colors.background,
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
+      borderTopLeftRadius: '16@ms0.2',
+      borderTopRightRadius: '16@ms0.2',
       flexDirection: 'column',
       justifyContent: 'flex-start',
       margin: 0,
       marginTop,
-      paddingHorizontal: 15,
+      paddingHorizontal: '15@ms0.2',
     },
     errorContainer: {
       backgroundColor: theme.colors.error,
-      borderRadius: 4,
-      marginTop: 20,
-      padding: 10,
+      borderRadius: '4@ms0.2',
+      marginTop: '20@ms0.2',
+      padding: '10@ms0.2',
     },
     errorText: {
       color: theme.colors.errorText,
@@ -51,15 +52,25 @@ export default (theme: ThemeType): Styles => {
     extraButton: {
       alignItems: 'center',
       backgroundColor: theme.colors.primary,
-      borderRadius: 4,
+      borderRadius: '4@ms0.2',
       flexDirection: 'row',
       justifyContent: 'center',
-      marginTop: 20,
-      paddingVertical: 16,
+      marginTop: '20@ms0.2',
+      paddingVertical: '16@ms0.2',
+    },
+    extraButtonOutline: {
+      alignItems: 'center',
+      borderColor: theme.colors.primary,
+      borderRadius: '4@ms0.2',
+      borderWidth: '2@ms0.2',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginTop: '20@ms0.2',
+      paddingVertical: '8@ms0.2',
     },
     headerButton: {
       color: theme.colors.primary,
-      fontSize: 45,
+      fontSize: '45@ms0.2',
     },
     headerButtonContainer: {
       alignContent: 'center',
@@ -70,13 +81,13 @@ export default (theme: ThemeType): Styles => {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 20,
-      marginBottom: 50,
+      marginTop: '20@ms0.2',
+      marginBottom: '50@ms0.2',
       width: '100%',
     },
     invertButtonText: {
-      color: theme.colors.primaryAccent,
-      fontSize: 25,
+      color: theme.colors.primary,
+      fontSize: '25@ms0.2',
     },
     mathText: {
       fontSize: '18@ms0.2',
@@ -85,14 +96,14 @@ export default (theme: ThemeType): Styles => {
     },
     textInput: {
       color: theme.colors.text,
-      fontSize: 25,
+      fontSize: '25@ms0.2',
       textAlign: 'center',
     },
     textInputContainer: {
       borderColor: theme.colors.border,
-      borderRadius: 8,
-      borderWidth: 1,
-      padding: 10,
+      borderRadius: '8@ms0.2',
+      borderWidth: '1@ms0.2',
+      padding: '10@ms0.2',
       width: '100%',
     },
     titleText: {

@@ -102,7 +102,7 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
         setModalState(ModalState.NONE);
         setError(null);
       } else if (newName !== data.name) {
-        setError('Invalid Title');
+        setError('Invalid Name');
       } else {
         setModalState(ModalState.NONE);
       }
