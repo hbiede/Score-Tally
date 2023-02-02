@@ -7,11 +7,12 @@ type Styles = {
   container: StrViewStyle;
   errorContainer: StrViewStyle;
   errorText: StrTextStyle;
+  extraButton: StrViewStyle;
   headerButton: StrTextStyle;
   headerButtonContainer: StrViewStyle;
   headerRow: StrViewStyle;
-  invertButton: StrViewStyle;
   invertButtonText: StrTextStyle;
+  mathText: StrTextStyle;
   modalContainer: StrViewStyle;
   textInput: StrTextStyle;
   textInputContainer: StrViewStyle;
@@ -36,7 +37,6 @@ export default (theme: ThemeType): Styles => {
       paddingHorizontal: 15,
     },
     errorContainer: {
-      alignItems: 'center',
       backgroundColor: theme.colors.error,
       borderRadius: 4,
       marginTop: 20,
@@ -47,6 +47,15 @@ export default (theme: ThemeType): Styles => {
       fontSize: '16@ms0.2',
       lineHeight: '20@ms0.2',
       textAlign: 'center',
+    },
+    extraButton: {
+      alignItems: 'center',
+      backgroundColor: theme.colors.primary,
+      borderRadius: 4,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginTop: 20,
+      paddingVertical: 16,
     },
     headerButton: {
       color: theme.colors.primary,
@@ -65,15 +74,13 @@ export default (theme: ThemeType): Styles => {
       marginBottom: 50,
       width: '100%',
     },
-    invertButton: {
-      backgroundColor: theme.colors.primary,
-      borderRadius: 4,
-      marginTop: 20,
-      paddingVertical: 16,
-    },
     invertButtonText: {
       color: theme.colors.primaryAccent,
       fontSize: 25,
+    },
+    mathText: {
+      fontSize: '18@ms0.2',
+      paddingTop: '12@ms0.2',
       textAlign: 'center',
     },
     textInput: {

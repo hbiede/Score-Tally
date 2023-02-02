@@ -5,13 +5,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Counter } from 'Statics/Types';
 
-export type SetCountersAction = Counter[];
-
-export type UpdateCounterAction = Counter;
-
 export type AppendCounterAction = Partial<Counter> | undefined;
 
 export type RemoveCounterAction = Counter;
+
+export type UpdateCounterAction = Counter;
+
+export type UpdateOrderAction = {
+  index: number;
+  isUp: boolean;
+};
 
 type CounterState = Readonly<{
   counters: Counter[];
@@ -63,13 +66,6 @@ const counterReducerSlice = createSlice({
       }
       return state;
     },
-    setCounter: (
-      state: CounterState,
-      action: PayloadAction<SetCountersAction>,
-    ): CounterState => ({
-      ...state,
-      counters: action.payload,
-    }),
     updateCounter: (
       state: CounterState,
       action: PayloadAction<UpdateCounterAction>,
@@ -94,8 +90,39 @@ const counterReducerSlice = createSlice({
         counters: [...state.counters, action.payload],
       };
     },
+    updateOrder: (
+      state: CounterState,
+      { payload: { index, isUp } }: PayloadAction<UpdateOrderAction>,
+    ) => {
+      if (isUp) {
+        if (index === 0) {
+          return state;
+        }
+        return {
+          ...state,
+          counters: [
+            ...state.counters.slice(0, index - 1),
+            state.counters[index],
+            state.counters[index - 1],
+            ...state.counters.slice(index + 1),
+          ].filter((c) => !!c),
+        };
+      }
+      if (index === state.counters.length - 1) {
+        return state;
+      }
+      return {
+        ...state,
+        counters: [
+          ...state.counters.slice(0, index),
+          state.counters[index + 1],
+          state.counters[index],
+          ...state.counters.slice(index + 2),
+        ].filter((c) => !!c),
+      };
+    },
   },
 });
-export const { appendCounter, removeCounter, setCounter, updateCounter } =
+export const { appendCounter, removeCounter, updateCounter, updateOrder } =
   counterReducerSlice.actions;
 export default counterReducerSlice.reducer;

@@ -2,12 +2,16 @@ import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
 import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
 
 type Style = {
+  buttonContainer: StrViewStyle;
   container: StrViewStyle;
   shadowContainer: StrViewStyle;
   title: StrTextStyle;
 };
 
 export default (theme: ThemeType): Style => ({
+  buttonContainer: {
+    width: '40@ms0.2',
+  },
   container: {
     alignItems: 'center',
     alignSelf: 'center',

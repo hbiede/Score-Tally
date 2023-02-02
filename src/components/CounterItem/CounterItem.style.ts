@@ -6,6 +6,7 @@ import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
 type Style = {
   background: StrViewStyle;
   detail: StrTextStyle;
+  orderButton: StrViewStyle;
   removeButton: StrViewStyle;
   removeWrapper: StrViewStyle;
   tally: StrTextStyle;
@@ -41,6 +42,12 @@ const style = (theme: ThemeType): Style => ({
     fontSize: '24@ms0.2',
     lineHeight: '30@ms0.2',
     textAlign: 'center',
+  },
+  orderButton: {
+    aspectRatio: 1,
+    backgroundColor: theme.colors.primary,
+    borderRadius: '4@ms0.2',
+    marginRight: '4@ms0.2',
   },
   removeButton: {
     marginLeft: '8@ms0.2',

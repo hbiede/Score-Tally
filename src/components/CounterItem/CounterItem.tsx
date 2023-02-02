@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import {
   AccessibilityActionEvent,
+  LayoutAnimation,
   Text,
   TouchableHighlight,
   TouchableOpacity,
@@ -10,28 +11,51 @@ import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CounterItemStyle from 'Components/CounterItem/CounterItem.style';
 import useStyle from 'Components/ThemeProvider/useStyle';
 import { Counter } from 'Statics/Types';
-import { removeCounter, updateCounter } from 'Redux/modules/counters';
+import {
+  removeCounter,
+  updateCounter,
+  updateOrder,
+} from 'Redux/modules/counters';
 import useTheme from 'Components/ThemeProvider/useTheme';
 import EditModal, {
   ModalState,
 } from 'Components/CounterItem/EditModal/EditModal';
+import { AppReduxState } from 'Redux/modules/reducer';
 
 type Props = {
   data: Counter;
+  index: number;
   isEditing?: boolean;
+  place: number;
 };
 
-const CounterItem = ({ data, isEditing }: Props): JSX.Element => {
+const getPlaceString = (place: number): string => {
+  switch (place) {
+    case 1:
+      return '🥇 ';
+    case 2:
+      return '🥈 ';
+    case 3:
+      return '🥉 ';
+    default:
+      return '';
+  }
+};
+
+const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const [currentModalState, setModalState] = useState<
     (typeof ModalState)[keyof typeof ModalState]
   >(ModalState.NONE);
   const [error, setError] = useState<string | null>(null);
+  const { playerCount } = useSelector((state: AppReduxState) => ({
+    playerCount: state.counters.counters.length,
+  }));
 
   const setScore = useCallback(
     (score = data.tally + 1) => {
@@ -54,10 +78,12 @@ const CounterItem = ({ data, isEditing }: Props): JSX.Element => {
     setModalState(ModalState.SCORE);
   }, []);
 
-  const onRemove = useCallback(
-    () => dispatch(removeCounter(data)),
-    [data, dispatch],
-  );
+  const onRemove = useCallback(() => {
+    dispatch(removeCounter(data));
+    if (playerCount > 1) {
+      LayoutAnimation.easeInEaseOut();
+    }
+  }, [data, dispatch, playerCount]);
 
   const onBackPress = useCallback(() => {
     setModalState(ModalState.NONE);
@@ -114,6 +140,19 @@ const CounterItem = ({ data, isEditing }: Props): JSX.Element => {
     [data, dispatch, onSetRequest],
   );
 
+  const move = useCallback(
+    (isUp: boolean) => {
+      dispatch(
+        updateOrder({
+          index,
+          isUp,
+        }),
+      );
+      LayoutAnimation.easeInEaseOut();
+    },
+    [dispatch, index],
+  );
+
   const style = useStyle(CounterItemStyle);
   const theme = useTheme();
 
@@ -129,20 +168,60 @@ const CounterItem = ({ data, isEditing }: Props): JSX.Element => {
           value={data.name}
         />
         <View style={style.background} accessible={false}>
-          <TouchableOpacity
-            onPress={onEditTitle}
-            hitSlop={{
-              top: 20,
-              left: 20,
-              bottom: 20,
-              right: 20,
+          <View
+            style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              justifyContent: 'center',
             }}
-            accessibilityHint="Tap to edit player name"
           >
-            <Text style={style.detail}>{data.name}</Text>
-          </TouchableOpacity>
+            {playerCount > 1 && (
+              <>
+                {(playerCount > 2 || index === 1) && (
+                  <TouchableOpacity
+                    accessibilityHint="Move up"
+                    disabled={index === 0}
+                    onPress={() => move(true)}
+                    style={[style.orderButton, index === 0 && { opacity: 0 }]}
+                  >
+                    <MaterialIcons
+                      color={theme.colors.accentBackground}
+                      size={35}
+                      name="keyboard-arrow-up"
+                    />
+                  </TouchableOpacity>
+                )}
+                {(playerCount > 2 || index === 0) && (
+                  <TouchableOpacity
+                    accessibilityHint="Move down"
+                    disabled={index === playerCount - 1}
+                    onPress={() => move(false)}
+                    style={[
+                      style.orderButton,
+                      index === playerCount - 1 && { opacity: 0 },
+                    ]}
+                  >
+                    <MaterialIcons
+                      color={theme.colors.accentBackground}
+                      size={35}
+                      name="keyboard-arrow-down"
+                    />
+                  </TouchableOpacity>
+                )}
+                <View style={{ width: 8 }} />
+              </>
+            )}
+            <TouchableOpacity
+              onPress={onEditTitle}
+              accessibilityHint="Tap to edit player name"
+            >
+              <Text style={style.detail}>{data.name}</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={style.removeWrapper}>
             <Text style={style.tally} accessible={false}>
+              {getPlaceString(place)}
               {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
             </Text>
             <TouchableOpacity
@@ -203,6 +282,7 @@ const CounterItem = ({ data, isEditing }: Props): JSX.Element => {
             style={style.tally}
             accessibilityLabel={`current count: ${data.tally}`}
           >
+            {getPlaceString(place)}
             {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
           </Text>
         </>

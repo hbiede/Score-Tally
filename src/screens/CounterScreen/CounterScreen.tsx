@@ -1,5 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
+  Alert,
   FlatList,
   InteractionManager,
   TouchableOpacity,
@@ -20,16 +27,17 @@ import { CounterItem } from 'Components/CounterItem';
 import { TallyHeader } from 'Components/TallyHeader';
 
 import { AppReduxState } from 'Redux/modules/reducer';
-import { appendCounter, defaultCounter } from 'Redux/modules/counters';
+import { appendCounter } from 'Redux/modules/counters';
 import { Counter } from 'Statics/Types';
 
 const CounterScreen = (): JSX.Element => {
   const [isEditing, setIsEditing] = useState(false);
   const onSetEditing = useCallback(() => setIsEditing(!isEditing), [isEditing]);
 
-  const counters = useSelector(
-    (state: AppReduxState) => state.counters.counters,
-  );
+  const { counters, highScoreWins } = useSelector((state: AppReduxState) => ({
+    counters: state.counters.counters,
+    highScoreWins: state.sort.highScoreWins,
+  }));
 
   const listRef = useRef<FlatList<Counter>>(null);
   const [hasAdded, setHasAdded] = useState(false);
@@ -52,35 +60,57 @@ const CounterScreen = (): JSX.Element => {
 
   const dispatch = useDispatch();
   const addCounterCallback = useCallback(() => {
-    let newName: string | undefined;
-    if (counters.find(({ name }) => defaultCounter.name === name)) {
-      const regexMatch = new RegExp(
-        `${defaultCounter.name.toLocaleLowerCase()} \\((\\d+)\\)`,
+    Alert.prompt('New Player', 'Enter a name for the new player', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: (newName: string | undefined) => {
+          if (newName) {
+            dispatch(appendCounter({ name: newName }));
+            setHasAdded(true);
+          } else {
+            Alert.alert('Invalid Name', 'You must enter a valid name');
+          }
+        },
+      },
+    ]);
+  }, [dispatch]);
+
+  const ranking = useMemo(() => {
+    const sortedOrder = counters
+      .slice()
+      .sort(
+        ({ tally: a }, { tally: b }) =>
+          (a < b ? 1 : -1) * (highScoreWins ? 1 : -1),
       );
-      newName = `${defaultCounter.name} (${
-        Math.max(
-          ...counters.map(({ name }) => {
-            const match = regexMatch.exec(name.toLocaleLowerCase());
-            return match ? Number.parseInt(match[1], 10) : 0;
-          }),
-        ) + 1
-      })`;
-    }
-    dispatch(appendCounter(newName ? { name: newName } : {}));
-    setHasAdded(true);
-  }, [counters, dispatch]);
+
+    return sortedOrder.reduce(
+      (acc, { key, tally }, i, arr): Record<string, number> => ({
+        ...acc,
+        [key]:
+          i > 0 && tally === arr[i - 1].tally ? acc[arr[i - 1].key] : i + 1,
+      }),
+      {} as Record<string, number>,
+    );
+  }, [counters, highScoreWins]);
 
   const style = useStyle(CounterScreenStyle);
-  const colorScheme = useColorScheme();
-  if (counters.length === 0) {
-    return (
-      <View style={style.safeAreaContainer}>
-        <StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
-        <TallyHeader
-          onSetEditing={onSetEditing}
-          isEditing={isEditing}
-          isEmpty={counters.length === 0}
-        />
+  return (
+    <View style={style.safeAreaContainer}>
+      <StatusBar style={useColorScheme() === 'light' ? 'dark' : 'light'} />
+      <TallyHeader
+        addCounterCallback={
+          counters.length === 0 ? undefined : addCounterCallback
+        }
+        highScoreWins={highScoreWins}
+        isEditing={isEditing}
+        isEmpty={counters.length === 0}
+        onSetEditing={onSetEditing}
+      />
+      {counters.length === 0 ? (
         <View style={style.emptyContainer}>
           <TouchableOpacity
             onPress={addCounterCallback}
@@ -90,32 +120,26 @@ const CounterScreen = (): JSX.Element => {
             <MaterialIcons name="add" color="#FFFFFF" size={30} />
           </TouchableOpacity>
         </View>
-      </View>
-    );
-  }
-
-  return (
-    <View style={style.safeAreaContainer}>
-      <StatusBar style={colorScheme === 'light' ? 'dark' : 'light'} />
-      <TallyHeader
-        onSetEditing={onSetEditing}
-        isEditing={isEditing}
-        isEmpty={counters.length === 0}
-        addCounterCallback={addCounterCallback}
-      />
-      <FlatList
-        contentContainerStyle={style.container}
-        data={counters}
-        keyExtractor={(counter) => counter.key}
-        scrollEnabled
-        renderItem={({ item }) => (
-          <CounterItem data={item} isEditing={isEditing} />
-        )}
-        ListHeaderComponent={<View style={{ height: 10 }} />}
-        initialNumToRender={6}
-        keyboardShouldPersistTaps="handled"
-        ref={listRef}
-      />
+      ) : (
+        <FlatList
+          contentContainerStyle={style.container}
+          data={counters}
+          keyExtractor={(counter) => counter.key}
+          scrollEnabled
+          renderItem={({ item, index }) => (
+            <CounterItem
+              data={item}
+              index={index}
+              isEditing={isEditing}
+              place={ranking[item.key]}
+            />
+          )}
+          ListHeaderComponent={<View style={{ height: 10 }} />}
+          initialNumToRender={6}
+          keyboardShouldPersistTaps="handled"
+          ref={listRef}
+        />
+      )}
     </View>
   );
 };

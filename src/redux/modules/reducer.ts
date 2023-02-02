@@ -1,14 +1,23 @@
-import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
+import { combineReducers, Store, Reducer, AnyAction } from 'redux';
 import {
   persistStore,
   persistReducer,
   Persistor,
   Transform,
   PersistState,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { configureStore } from '@reduxjs/toolkit';
+
 import counters from 'Redux/modules/counters';
+import sort from 'Redux/modules/sort';
 
 type PersistPartial = {
   _persist: PersistState;
@@ -21,6 +30,7 @@ type StoreAndPersistor<S> = {
 
 const reducers = {
   counters,
+  sort,
 };
 
 const mainReducer = combineReducers(reducers);
@@ -45,12 +55,17 @@ const createPersistedReducer = <S>(
 
   const persistedReducer = persistReducer<S, AnyAction>(persistConfig, reducer);
 
-  const store = createStore<
-    S & PersistPartial,
-    AnyAction,
-    Record<string, unknown>,
-    Record<string, unknown>
-  >(persistedReducer);
+  const store = configureStore<S & PersistPartial, AnyAction>({
+    reducer: persistedReducer,
+    // @ts-expect-error - Return is not as the type expects
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
+    devTools: __DEV__,
+  });
   const persistor = persistStore(store);
   return { store, persistor };
 };

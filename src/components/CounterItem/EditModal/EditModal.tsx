@@ -67,7 +67,12 @@ const EditModal = ({
     setValue(propValue);
   }, [propValue]);
 
-  const onSaveCallback = useCallback(() => onSave(value), [onSave, value]);
+  const numberPropValue = Number(propValue);
+  const numberValue = Number(value);
+  const onSaveCallback = useCallback(
+    () => onSave(`${numberPropValue + numberValue}`),
+    [numberPropValue, numberValue, onSave],
+  );
 
   const [selectTextOnFocus, setSelectTextOnFocus] = useState(true);
   useEffect(() => {
@@ -130,15 +135,12 @@ const EditModal = ({
                 style={style.headerButtonContainer}
                 onPress={backButtonCallback}
                 accessible
-                accessibilityLabel={value === propValue ? 'Back' : 'Cancel'}
+                accessibilityLabel="Back"
               >
-                <MaterialIcons
-                  name={value === propValue ? 'chevron-left' : 'close'}
-                  style={style.headerButton}
-                />
+                <MaterialIcons name="chevron-left" style={style.headerButton} />
               </TouchableOpacity>
               <Text style={style.titleText} accessible={false}>
-                Set {type}
+                {type === ModalState.NAME ? 'Set Name' : 'Add to Score'}
               </Text>
               <TouchableOpacity
                 style={style.headerButtonContainer}
@@ -162,6 +164,7 @@ const EditModal = ({
                 placeholderTextColor={`${theme.colors.text}88`}
                 selectTextOnFocus={selectTextOnFocus}
                 style={style.textInput}
+                returnKeyType="done"
                 value={value}
               />
             </View>
@@ -178,16 +181,33 @@ const EditModal = ({
             )}
           </View>
           {type === ModalState.SCORE && (
-            <TouchableOpacity
-              style={style.invertButton}
-              onPress={invertValue}
-              accessibilityLabel="Invert value"
-              accessibilityHint="Multiply the score by -1"
-            >
-              <Text style={style.invertButtonText} accessible={false}>
-                +/-
+            <>
+              <Text style={style.mathText}>
+                {numberPropValue} {numberValue < 0 ? '-' : '+'}{' '}
+                {Math.abs(numberValue)} = {numberPropValue + numberValue}
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={style.extraButton}
+                onPress={invertValue}
+                accessibilityLabel="Invert value"
+                accessibilityHint="Multiply the score by -1"
+              >
+                <Text style={style.invertButtonText} accessible={false}>
+                  +/-
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.extraButton}
+                onPress={onSaveCallback}
+                accessibilityLabel={`Confirm ${type}`}
+              >
+                <MaterialIcons
+                  name="check"
+                  size={24}
+                  color={theme.colors.primaryAccent}
+                />
+              </TouchableOpacity>
+            </>
           )}
         </KeyboardAvoidingView>
       </Modal>
