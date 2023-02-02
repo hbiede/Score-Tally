@@ -42,13 +42,10 @@ const createPersistedReducer = <S>(
   appBlacklist: string[] = [],
   transforms: Transform<any, any>[] = [], // eslint-disable-line @typescript-eslint/no-explicit-any
 ): StoreAndPersistor<S & PersistPartial> => {
-  // fill out with any blacklisted items
-  const blacklist = ([] as string[]).concat(appBlacklist);
-
   const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    blacklist,
+    blacklist: ([] as string[]).concat(appBlacklist),
     transforms,
     timeout: __DEV__ ? 10000 : 5000,
   };
