@@ -1,0 +1,49 @@
+{
+  "cli": {
+    "version": ">= 3.3.0",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "production": {
+      "channel": "production",
+      "android": {
+        "buildType": "app-bundle",
+        "image": "latest"
+      },
+      "ios": {
+        "image": "latest"
+      }
+    },
+    "preview": {
+      "developmentClient": true,
+      "extends": "production",
+      "distribution": "internal",
+      "channel": "default",
+      "env": {
+        "APP_VARIANT": "internal_development"
+      },
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "resourceClass": "m1-medium"
+      }
+    },
+    "devclient": {
+      "extends": "preview",
+      "channel": "devclient",
+      "ios": {
+        "simulator": true
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "appleId": "hbiede@gmail.com",
+        "appleTeamId": "69RV8YV62P",
+        "ascAppId": "1534407358"
+      }
+    }
+  }
+}

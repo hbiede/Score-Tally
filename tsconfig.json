@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "Components/*": [
+        "src/components/*"
+      ],
+      "Redux/*": [
+        "src/redux/*"
+      ],
+      "Screens/*": [
+        "src/screens/*"
+      ],
+      "Statics/*": [
+        "src/statics/*"
+      ],
+      "Assets/*": [
+        "assets/*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "app.config.ts",
+    "index.js"
+  ],
+  "extends": "expo/tsconfig.base"
+}

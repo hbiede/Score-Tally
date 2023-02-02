@@ -1,0 +1,33 @@
+name: Test and Release
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.ts'
+      - '**.tsx'
+      - '**.js'
+      - 'test-release.yaml'
+
+jobs:
+  release:
+    name: Install and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Test
+        uses: dmsi-io/gha-mobile-test@main
+        with:
+          test: 'false'
+
+      - name: Release
+        uses: dmsi-io/gha-mobile-release@main
+        timeout-minutes: 45
+        with:
+          expo-app-specific-password: ${{ secrets.EXPO_APP_SPECIFIC_PASSWORD }}
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+          git-token: ${{ secrets.GITHUB_TOKEN }}
+          increment-build-number: 'true'
+          profile: 'production'
