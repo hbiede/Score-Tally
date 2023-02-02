@@ -26,6 +26,8 @@ jobs:
         uses: dmsi-io/gha-mobile-release@main
         timeout-minutes: 45
         with:
+          commit-author-email: "$(git --no-pager log --format=format:'%ae' -n 1)"
+          commit-author-name: "$(git --no-pager log --format=format:'%an' -n 1)"
           expo-app-specific-password: ${{ secrets.EXPO_APP_SPECIFIC_PASSWORD }}
           expo-token: ${{ secrets.EXPO_TOKEN }}
           git-token: ${{ secrets.GITHUB_TOKEN }}
