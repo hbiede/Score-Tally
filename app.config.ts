@@ -46,7 +46,9 @@ const config: ExpoConfig = {
     'submodules/wedgekit/**/resources/**',
   ],
   jsEngine: IS_INT_DEV ? 'jsc' : 'hermes',
-  runtimeVersion: 'exposdk:47.0.0',
+  runtimeVersion: {
+    policy: 'sdkVersion',
+  },
   extra: {
     eas: {
       projectId: '9b0cc3a3-99d1-417b-8726-8fed445eb171',

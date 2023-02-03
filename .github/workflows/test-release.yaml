@@ -28,4 +28,5 @@ jobs:
         with:
           expo-app-specific-password: ${{ secrets.EXPO_APP_SPECIFIC_PASSWORD }}
           expo-token: ${{ secrets.EXPO_TOKEN }}
+          increment-build-number: 'false'
           profile: 'production'
