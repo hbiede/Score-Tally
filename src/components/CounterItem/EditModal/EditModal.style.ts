@@ -15,6 +15,7 @@ type Styles = {
   invertButtonText: StrTextStyle;
   mathText: StrTextStyle;
   modalContainer: StrViewStyle;
+  nameText: StrTextStyle;
   textInput: StrTextStyle;
   textInputContainer: StrViewStyle;
   titleText: StrTextStyle;
@@ -82,7 +83,7 @@ export default (theme: ThemeType): Styles => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       marginTop: '20@ms0.2',
-      marginBottom: '50@ms0.2',
+      marginBottom: '30@ms0.2',
       width: '100%',
     },
     invertButtonText: {
@@ -94,6 +95,11 @@ export default (theme: ThemeType): Styles => {
       paddingTop: '12@ms0.2',
       textAlign: 'center',
     },
+    nameText: {
+      color: theme.colors.primary,
+      fontSize: '24@ms0.2',
+      textAlign: 'center',
+    },
     textInput: {
       color: theme.colors.text,
       fontSize: '25@ms0.2',
@@ -103,6 +109,7 @@ export default (theme: ThemeType): Styles => {
       borderColor: theme.colors.border,
       borderRadius: '8@ms0.2',
       borderWidth: '1@ms0.2',
+      marginTop: '20@ms0.2',
       padding: '10@ms0.2',
       width: '100%',
     },

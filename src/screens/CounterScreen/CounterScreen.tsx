@@ -9,6 +9,7 @@ import {
   Alert,
   FlatList,
   InteractionManager,
+  Platform,
   TouchableOpacity,
   useColorScheme,
   View,
@@ -60,23 +61,27 @@ const CounterScreen = (): JSX.Element => {
 
   const dispatch = useDispatch();
   const addCounterCallback = useCallback(() => {
-    Alert.prompt('New Player', 'Enter a name for the new player', [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: (newName: string | undefined) => {
-          if (newName) {
-            dispatch(appendCounter({ name: newName }));
-            setHasAdded(true);
-          } else {
-            Alert.alert('Invalid Name', 'You must enter a valid name');
-          }
+    if (Platform.OS === 'ios') {
+      Alert.prompt('New Player', 'Enter a name for the new player', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
         },
-      },
-    ]);
+        {
+          text: 'OK',
+          onPress: (newName: string | undefined) => {
+            if (newName) {
+              dispatch(appendCounter({ name: newName }));
+              setHasAdded(true);
+            } else {
+              Alert.alert('Invalid Name', 'You must enter a valid name');
+            }
+          },
+        },
+      ]);
+    } else {
+      dispatch(appendCounter({ name: 'New Player' }));
+    }
   }, [dispatch]);
 
   const ranking = useMemo(() => {

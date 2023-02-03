@@ -31,6 +31,7 @@ type Props = {
   error: string | null;
   isVisible: boolean;
   onSave: (newValue: string) => void;
+  player: string;
   type?: (typeof ModalState)[keyof typeof ModalState];
   value?: string;
 };
@@ -40,6 +41,7 @@ const EditModal = ({
   error,
   isVisible,
   onSave,
+  player,
   type = ModalState.NONE,
   value: propValue = '',
 }: Props): JSX.Element => {
@@ -154,10 +156,12 @@ const EditModal = ({
                 <MaterialIcons name="check" style={style.headerButton} />
               </TouchableOpacity>
             </View>
+            {type === ModalState.SCORE && (
+              <Text style={style.nameText}>{player}</Text>
+            )}
             <View style={style.textInputContainer}>
               <TextInput
                 allowFontScaling
-                autoFocus
                 keyboardType={
                   type === ModalState.SCORE ? 'number-pad' : 'default'
                 }
@@ -185,10 +189,6 @@ const EditModal = ({
           </View>
           {type === ModalState.SCORE && (
             <>
-              <Text style={style.mathText}>
-                {numberPropValue} {numberValue < 0 ? '-' : '+'}{' '}
-                {Math.abs(numberValue)} = {numberPropValue + numberValue}
-              </Text>
               <TouchableOpacity
                 style={style.extraButtonOutline}
                 onPress={invertValue}
@@ -199,6 +199,10 @@ const EditModal = ({
                   +/-
                 </Text>
               </TouchableOpacity>
+              <Text style={style.mathText}>
+                {numberPropValue} {numberValue < 0 ? '-' : '+'}{' '}
+                {Math.abs(numberValue)} = {numberPropValue + numberValue}
+              </Text>
               <TouchableOpacity
                 style={style.extraButton}
                 onPress={onSaveCallback}

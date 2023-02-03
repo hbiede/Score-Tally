@@ -3,7 +3,6 @@ import {
   AccessibilityActionEvent,
   LayoutAnimation,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -164,6 +163,7 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
           error={error}
           isVisible={currentModalState === ModalState.NAME}
           onSave={onSetName}
+          player={data.name}
           type={currentModalState}
           value={data.name}
         />
@@ -253,40 +253,43 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
           setScore(Number(string));
           setModalState(ModalState.NONE);
         }}
+        player={data.name}
         type={currentModalState}
         value={`${data.tally}`}
       />
-      <TouchableHighlight
-        onPress={increment}
-        style={style.background}
-        onLongPress={onSetRequest}
-        delayLongPress={300}
-        accessible
-        onAccessibilityTap={increment}
-        onAccessibilityAction={onAccessibilityAction}
-        accessibilityActions={[
-          { name: 'increment' },
-          { name: 'decrement' },
-          { name: 'longPress' },
-          { name: 'longpress' },
-          { name: 'magicTap' },
-        ]}
-        accessibilityRole="adjustable"
-        accessibilityLabel={`${data.name}. current count: ${Math.abs(
-          data.tally,
-        )}`}
-      >
-        <>
-          <Text style={style.detail}>{data.name}</Text>
-          <Text
-            style={style.tally}
-            accessibilityLabel={`current count: ${data.tally}`}
-          >
-            {getPlaceString(place)}
-            {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
-          </Text>
-        </>
-      </TouchableHighlight>
+      <View style={style.backgroundContainer}>
+        <TouchableOpacity
+          onPress={increment}
+          style={style.background}
+          onLongPress={onSetRequest}
+          delayLongPress={300}
+          accessible
+          onAccessibilityTap={increment}
+          onAccessibilityAction={onAccessibilityAction}
+          accessibilityActions={[
+            { name: 'increment' },
+            { name: 'decrement' },
+            { name: 'longPress' },
+            { name: 'longpress' },
+            { name: 'magicTap' },
+          ]}
+          accessibilityRole="adjustable"
+          accessibilityLabel={`${data.name}. current count: ${Math.abs(
+            data.tally,
+          )}`}
+        >
+          <>
+            <Text style={style.detail}>{data.name}</Text>
+            <Text
+              style={style.tally}
+              accessibilityLabel={`current count: ${data.tally}`}
+            >
+              {getPlaceString(place)}
+              {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
+            </Text>
+          </>
+        </TouchableOpacity>
+      </View>
     </>
   );
 };

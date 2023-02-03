@@ -5,6 +5,7 @@ import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
 
 type Style = {
   background: StrViewStyle;
+  backgroundContainer: StrViewStyle;
   detail: StrTextStyle;
   orderButton: StrViewStyle;
   removeButton: StrViewStyle;
@@ -15,13 +16,16 @@ type Style = {
 const style = (theme: ThemeType): Style => ({
   background: {
     alignItems: 'center',
-    borderColor:
-      theme.currentTheme === 'light' ? theme.colors.border : undefined,
-    borderRadius: 20,
     backgroundColor: theme.colors.background,
     flexDirection: 'row',
     height: 100,
     justifyContent: 'space-between',
+  },
+  backgroundContainer: {
+    borderColor:
+      theme.currentTheme === 'light' ? theme.colors.border : undefined,
+    borderRadius: 20,
+    backgroundColor: theme.colors.background,
     marginBottom: 12,
     marginHorizontal: 12,
     paddingHorizontal: 16,
