@@ -6,6 +6,7 @@ type Style = {
   container: StrViewStyle;
   emptyContainer: StrViewStyle;
   safeAreaContainer: StrViewStyle;
+  wrapper: StrViewStyle;
 };
 
 const style = (theme: ThemeType): Style => ({
@@ -15,8 +16,6 @@ const style = (theme: ThemeType): Style => ({
     padding: 20,
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 5,
     width: '100%',
   },
@@ -28,6 +27,11 @@ const style = (theme: ThemeType): Style => ({
   safeAreaContainer: {
     backgroundColor: theme.colors.accentBackground,
     flex: 1,
+    height: '100%',
+    width: '100%',
+  },
+  wrapper: {
+    alignItems: 'center',
     height: '100%',
     width: '100%',
   },

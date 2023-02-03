@@ -10,7 +10,7 @@ const config: ExpoConfig = {
   entryPoint: './index.js',
   privacy: 'public',
   platforms: ['ios', 'android'],
-  version: '1.0.0',
+  version: '1.0.1',
   orientation: 'default',
   icon: './assets/icon.png',
   splash: {
@@ -19,7 +19,7 @@ const config: ExpoConfig = {
     backgroundColor: '#0B9D20',
   },
   ios: {
-    buildNumber: '2',
+    buildNumber: '3',
     bundleIdentifier: IS_INT_DEV
       ? 'com.hbiede.intDev.ScoreTally'
       : 'com.hbiede.ScoreTally',
@@ -38,7 +38,7 @@ const config: ExpoConfig = {
       ? 'com.hbiede.intDev.ScoreTally'
       : 'com.hbiede.ScoreTally',
     softwareKeyboardLayoutMode: 'resize',
-    versionCode: 10000,
+    versionCode: 10001,
   },
   assetBundlePatterns: [
     'resources/**',

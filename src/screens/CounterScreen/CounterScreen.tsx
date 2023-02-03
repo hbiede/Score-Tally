@@ -9,6 +9,7 @@ import {
   Alert,
   FlatList,
   InteractionManager,
+  LayoutAnimation,
   Platform,
   TouchableOpacity,
   useColorScheme,
@@ -33,7 +34,10 @@ import { Counter } from 'Statics/Types';
 
 const CounterScreen = (): JSX.Element => {
   const [isEditing, setIsEditing] = useState(false);
-  const onSetEditing = useCallback(() => setIsEditing(!isEditing), [isEditing]);
+  const onSetEditing = useCallback(() => {
+    setIsEditing(!isEditing);
+    LayoutAnimation.easeInEaseOut();
+  }, [isEditing]);
 
   const { counters, highScoreWins } = useSelector((state: AppReduxState) => ({
     counters: state.counters.counters,
@@ -60,6 +64,14 @@ const CounterScreen = (): JSX.Element => {
   }, [isEditing, counters]);
 
   const dispatch = useDispatch();
+  const addToList = useCallback(
+    (name: string) => {
+      dispatch(appendCounter({ name }));
+      setHasAdded(true);
+      LayoutAnimation.easeInEaseOut();
+    },
+    [dispatch],
+  );
   const addCounterCallback = useCallback(() => {
     if (Platform.OS === 'ios') {
       Alert.prompt('New Player', 'Enter a name for the new player', [
@@ -71,8 +83,7 @@ const CounterScreen = (): JSX.Element => {
           text: 'OK',
           onPress: (newName: string | undefined) => {
             if (newName) {
-              dispatch(appendCounter({ name: newName }));
-              setHasAdded(true);
+              addToList(newName);
             } else {
               Alert.alert('Invalid Name', 'You must enter a valid name');
             }
@@ -80,9 +91,9 @@ const CounterScreen = (): JSX.Element => {
         },
       ]);
     } else {
-      dispatch(appendCounter({ name: 'New Player' }));
+      addToList('New Player');
     }
-  }, [dispatch]);
+  }, [addToList]);
 
   const ranking = useMemo(() => {
     const sortedOrder = counters
@@ -115,37 +126,39 @@ const CounterScreen = (): JSX.Element => {
         isEmpty={counters.length === 0}
         onSetEditing={onSetEditing}
       />
-      {counters.length === 0 ? (
-        <View style={style.emptyContainer}>
-          <TouchableOpacity
-            onPress={addCounterCallback}
-            style={style.addButton}
-            accessibilityLabel="Add a counter"
-          >
-            <MaterialIcons name="add" color="#FFFFFF" size={30} />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <FlatList
-          numColumns={Platform.OS === 'ios' && Platform.isPad ? 2 : 1}
-          contentContainerStyle={style.container}
-          data={counters}
-          keyExtractor={(counter) => counter.key}
-          scrollEnabled
-          renderItem={({ item, index }) => (
-            <CounterItem
-              data={item}
-              index={index}
-              isEditing={isEditing}
-              place={ranking[item.key]}
-            />
-          )}
-          ListHeaderComponent={<View style={{ height: 10 }} />}
-          initialNumToRender={6}
-          keyboardShouldPersistTaps="handled"
-          ref={listRef}
-        />
-      )}
+      <View style={style.wrapper}>
+        {counters.length === 0 ? (
+          <View style={style.emptyContainer}>
+            <TouchableOpacity
+              onPress={addCounterCallback}
+              style={style.addButton}
+              accessibilityLabel="Add a counter"
+            >
+              <MaterialIcons name="add" color="#FFFFFF" size={30} />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <FlatList
+            numColumns={Platform.OS === 'ios' && Platform.isPad ? 2 : 1}
+            contentContainerStyle={style.container}
+            data={counters}
+            keyExtractor={(counter) => counter.key}
+            scrollEnabled
+            renderItem={({ item, index }) => (
+              <CounterItem
+                data={item}
+                index={index}
+                isEditing={isEditing}
+                place={ranking[item.key]}
+              />
+            )}
+            ListHeaderComponent={<View style={{ height: 10 }} />}
+            initialNumToRender={6}
+            keyboardShouldPersistTaps="handled"
+            ref={listRef}
+          />
+        )}
+      </View>
     </View>
   );
 };

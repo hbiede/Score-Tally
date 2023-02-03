@@ -7,6 +7,7 @@ type Style = {
   background: StrViewStyle;
   backgroundContainer: StrViewStyle;
   detail: StrTextStyle;
+  leftSectionWrapper: StrViewStyle;
   orderButton: StrViewStyle;
   removeButton: StrViewStyle;
   removeWrapper: StrViewStyle;
@@ -49,6 +50,10 @@ const style = (theme: ThemeType): Style => ({
     fontSize: '24@ms0.2',
     lineHeight: '30@ms0.2',
     textAlign: 'center',
+  },
+  leftSectionWrapper: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   orderButton: {
     aspectRatio: 1,
