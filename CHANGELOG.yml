@@ -1,9 +1,15 @@
 upcoming:
-  version: 1.0.0
+  version: 1.0.1
+  date: February 3, 2023
+  dev:
+    -
+  user_facing:
+    - Tweak layout and animations
+
+releases:
+  - version: 1.0.0
     date: February 1, 2023
     dev:
       - Setup dev environment
     user_facing:
       - Initial release
-
-releases:
