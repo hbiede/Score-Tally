@@ -34,7 +34,7 @@ const style = (theme: ThemeType): Style => ({
     paddingHorizontal: 16,
     paddingVertical: 4,
     width:
-      Dimensions.get('window').width / (isPad ? 2 : 1) - 24 * (isPad ? 2 : 1),
+      Dimensions.get('window').width / (isPad ? 2 : 1) - 24 * (isPad ? 2 : 1.5),
 
     shadowColor: '#000',
     shadowOffset: {

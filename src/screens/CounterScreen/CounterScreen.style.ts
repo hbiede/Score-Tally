@@ -33,6 +33,7 @@ const style = (theme: ThemeType): Style => ({
   wrapper: {
     alignItems: 'center',
     height: '100%',
+    justifyContent: 'center',
     width: '100%',
   },
 });
