@@ -127,6 +127,7 @@ const CounterScreen = (): JSX.Element => {
         </View>
       ) : (
         <FlatList
+          numColumns={Platform.OS === 'ios' && Platform.isPad ? 2 : 1}
           contentContainerStyle={style.container}
           data={counters}
           keyExtractor={(counter) => counter.key}

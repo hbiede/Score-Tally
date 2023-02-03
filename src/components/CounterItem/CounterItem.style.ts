@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
 import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
@@ -12,6 +12,8 @@ type Style = {
   removeWrapper: StrViewStyle;
   tally: StrTextStyle;
 };
+
+const isPad = Platform.OS === 'ios' && Platform.isPad;
 
 const style = (theme: ThemeType): Style => ({
   background: {
@@ -30,7 +32,8 @@ const style = (theme: ThemeType): Style => ({
     marginHorizontal: 12,
     paddingHorizontal: 16,
     paddingVertical: 4,
-    width: Dimensions.get('window').width - 24,
+    width:
+      Dimensions.get('window').width / (isPad ? 2 : 1) - 24 * (isPad ? 2 : 1),
 
     shadowColor: '#000',
     shadowOffset: {

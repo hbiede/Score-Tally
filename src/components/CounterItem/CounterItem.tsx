@@ -167,76 +167,78 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
           type={currentModalState}
           value={data.name}
         />
-        <View style={style.background} accessible={false}>
-          <View
-            style={{
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}
-          >
-            {playerCount > 1 && (
-              <>
-                {(playerCount > 2 || index === 1) && (
-                  <TouchableOpacity
-                    accessibilityHint="Move up"
-                    disabled={index === 0}
-                    onPress={() => move(true)}
-                    style={[style.orderButton, index === 0 && { opacity: 0 }]}
-                  >
-                    <MaterialIcons
-                      color={theme.colors.accentBackground}
-                      size={35}
-                      name="keyboard-arrow-up"
-                    />
-                  </TouchableOpacity>
-                )}
-                {(playerCount > 2 || index === 0) && (
-                  <TouchableOpacity
-                    accessibilityHint="Move down"
-                    disabled={index === playerCount - 1}
-                    onPress={() => move(false)}
-                    style={[
-                      style.orderButton,
-                      index === playerCount - 1 && { opacity: 0 },
-                    ]}
-                  >
-                    <MaterialIcons
-                      color={theme.colors.accentBackground}
-                      size={35}
-                      name="keyboard-arrow-down"
-                    />
-                  </TouchableOpacity>
-                )}
-                <View style={{ width: 8 }} />
-              </>
-            )}
-            <TouchableOpacity
-              onPress={onEditTitle}
-              accessibilityHint="Tap to edit player name"
+        <View style={style.backgroundContainer} accessible={false}>
+          <View style={style.background}>
+            <View
+              style={{
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
             >
-              <Text style={style.detail}>{data.name}</Text>
-            </TouchableOpacity>
-          </View>
+              {playerCount > 1 && (
+                <>
+                  {(playerCount > 2 || index === 1) && (
+                    <TouchableOpacity
+                      accessibilityHint="Move up"
+                      disabled={index === 0}
+                      onPress={() => move(true)}
+                      style={[style.orderButton, index === 0 && { opacity: 0 }]}
+                    >
+                      <MaterialIcons
+                        color={theme.colors.accentBackground}
+                        size={35}
+                        name="keyboard-arrow-up"
+                      />
+                    </TouchableOpacity>
+                  )}
+                  {(playerCount > 2 || index === 0) && (
+                    <TouchableOpacity
+                      accessibilityHint="Move down"
+                      disabled={index === playerCount - 1}
+                      onPress={() => move(false)}
+                      style={[
+                        style.orderButton,
+                        index === playerCount - 1 && { opacity: 0 },
+                      ]}
+                    >
+                      <MaterialIcons
+                        color={theme.colors.accentBackground}
+                        size={35}
+                        name="keyboard-arrow-down"
+                      />
+                    </TouchableOpacity>
+                  )}
+                  <View style={{ width: 8 }} />
+                </>
+              )}
+              <TouchableOpacity
+                onPress={onEditTitle}
+                accessibilityHint="Tap to edit player name"
+              >
+                <Text style={style.detail}>{data.name}</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={style.removeWrapper}>
-            <Text style={style.tally} accessible={false}>
-              {getPlaceString(place)}
-              {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
-            </Text>
-            <TouchableOpacity
-              style={style.removeButton}
-              onPress={onRemove}
-              accessible
-              accessibilityLabel="Delete"
-              accessibilityHint="Tap to delete player"
-            >
-              <MaterialIcons
-                name="close"
-                size={45}
-                color={theme.colors.secondary}
-              />
-            </TouchableOpacity>
+            <View style={style.removeWrapper}>
+              <Text style={style.tally} accessible={false}>
+                {getPlaceString(place)}
+                {data.tally > 1e5 ? data.tally.toPrecision(3) : data.tally}
+              </Text>
+              <TouchableOpacity
+                style={style.removeButton}
+                onPress={onRemove}
+                accessible
+                accessibilityLabel="Delete"
+                accessibilityHint="Tap to delete player"
+              >
+                <MaterialIcons
+                  name="close"
+                  size={45}
+                  color={theme.colors.secondary}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </>
