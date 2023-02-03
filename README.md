@@ -1,6 +1,7 @@
 # Counter - Counting Utility
 [![Test and Release](https://github.com/hbiede/Score-Tally/actions/workflows/test-release.yaml/badge.svg)](https://github.com/hbiede/Score-Tally/actions/workflows/test-release.yaml)
-Quick and Versatile Counter app
+
+Score Keeping Made Easy!
 
 ## Screenshots
 
