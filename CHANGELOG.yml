@@ -1,12 +1,16 @@
 upcoming:
-  version: 1.0.1
-  date: February 3, 2023
+  version:
+  date:
   dev:
     -
   user_facing:
-    - Tweak layout and animations
+    -
 
 releases:
+  - version: 1.0.1
+    date: June 2, 2023
+    user_facing:
+      - Tweak layout and animations
   - version: 1.0.0
     date: February 1, 2023
     dev:
