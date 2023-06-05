@@ -5,8 +5,8 @@ Score Keeping Made Easy!
 
 ## Screenshots
 
-| Platform | Image |
-| -------- | ----- |
-| iPhone | <img src="screenshots/iPhone-Medium-List.png" height=250/> |
-| iPad | <img src="screenshots/iPadPro6-List.png" height=250/> |
-| Android | <img src="screenshots/Android-List.png" height=250/> |
+| Platform | Image                                                      |
+|----------|------------------------------------------------------------|
+| iPhone   | <img src="screenshots/iPhone-Medium-List.png" height=250/> |
+| iPad     | <img src="screenshots/iPadPro6-List.png" height=250/>      |
+| Android  | <img src="screenshots/Android-List.png" height=250/>       |

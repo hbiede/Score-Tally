@@ -19,6 +19,7 @@ import useStyle from 'Components/ThemeProvider/useStyle';
 import useTheme from 'Components/ThemeProvider/useTheme';
 
 import EditModalStyles from './EditModal.style';
+import useReview from '../../../hooks/useReview';
 
 export const ModalState = {
   NONE: 'None',
@@ -48,6 +49,8 @@ const EditModal = ({
   const style = useStyle(EditModalStyles);
   const theme = useTheme();
 
+  const [canAskForReview, askForReview] = useReview();
+
   const [value, setValue] = useState(propValue);
   const onValueChange = useCallback(
     (newValue: string) => setValue(newValue),
@@ -71,13 +74,22 @@ const EditModal = ({
 
   const numberPropValue = Number(propValue);
   const numberValue = Number(value);
-  const onSaveCallback = useCallback(
-    () =>
-      onSave(
-        type === ModalState.SCORE ? `${numberPropValue + numberValue}` : value,
-      ),
-    [numberPropValue, numberValue, onSave, type, value],
-  );
+  const onSaveCallback = useCallback(() => {
+    onSave(
+      type === ModalState.SCORE ? `${numberPropValue + numberValue}` : value,
+    );
+    if (canAskForReview && numberPropValue > 0) {
+      void askForReview();
+    }
+  }, [
+    askForReview,
+    canAskForReview,
+    numberPropValue,
+    numberValue,
+    onSave,
+    type,
+    value,
+  ]);
 
   const [selectTextOnFocus, setSelectTextOnFocus] = useState(true);
   useEffect(() => {
@@ -89,10 +101,7 @@ const EditModal = ({
   const [animation, setAnimation] = useState<{
     animateIn?: Animation;
     animateOut?: Animation;
-  }>({
-    animateIn: undefined,
-    animateOut: undefined,
-  });
+  }>({});
   useEffect(() => {
     AccessibilityInfo.isReduceMotionEnabled().then((result) => {
       setAnimationTime(result ? 500 : 300);
@@ -102,10 +111,7 @@ const EditModal = ({
               animateIn: 'fadeIn' as const,
               animateOut: 'fadeOut' as const,
             }
-          : {
-              animateIn: undefined,
-              animateOut: undefined,
-            },
+          : {},
       );
     });
   }, []);

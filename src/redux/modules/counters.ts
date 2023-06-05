@@ -1,5 +1,4 @@
-import 'react-native-get-random-values';
-import { nanoid } from 'nanoid';
+import { randomUUID } from 'expo-crypto';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -44,7 +43,7 @@ const counterReducerSlice = createSlice({
         {
           ...defaultCounter,
           ...(action.payload || {}),
-          key: nanoid(),
+          key: randomUUID(),
         },
       ],
     }),

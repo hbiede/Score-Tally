@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { configureStore } from '@reduxjs/toolkit';
 
 import counters from 'Redux/modules/counters';
+import review from 'Redux/modules/review';
 import sort from 'Redux/modules/sort';
 
 type PersistPartial = {
@@ -30,6 +31,7 @@ type StoreAndPersistor<S> = {
 
 const reducers = {
   counters,
+  review,
   sort,
 };
 

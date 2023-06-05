@@ -7,10 +7,9 @@ const config: ExpoConfig = {
   description: 'Easily track scores for games',
   githubUrl: 'https://github.com/hbiede/Score-Tally',
   slug: 'ScoreTally',
-  entryPoint: './index.js',
   privacy: 'public',
   platforms: ['ios', 'android'],
-  version: '1.0.1',
+  version: '1.1.0',
   orientation: 'default',
   icon: './assets/icon.png',
   splash: {
@@ -19,7 +18,7 @@ const config: ExpoConfig = {
     backgroundColor: '#0B9D20',
   },
   ios: {
-    buildNumber: '5',
+    buildNumber: '7',
     bundleIdentifier: IS_INT_DEV
       ? 'com.hbiede.intDev.ScoreTally'
       : 'com.hbiede.ScoreTally',
@@ -45,7 +44,7 @@ const config: ExpoConfig = {
     'submodules/wedgekit/resources/**',
     'submodules/wedgekit/**/resources/**',
   ],
-  jsEngine: IS_INT_DEV ? 'jsc' : 'hermes',
+  jsEngine: 'hermes',
   runtimeVersion: {
     policy: 'sdkVersion',
   },
