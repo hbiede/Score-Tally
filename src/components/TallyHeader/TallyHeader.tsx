@@ -13,6 +13,7 @@ import { flipSortOrder } from 'Redux/modules/sort';
 
 import TallyHeaderStyles from './TallyHeader.style';
 import { SymbolView } from 'expo-symbols';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 type Props = {
   addCounterCallback?: () => void;
@@ -20,6 +21,7 @@ type Props = {
   isEditing?: boolean;
   isEmpty?: boolean;
   onSetEditing: () => void;
+  title?: string;
 };
 
 function TallyHeader({
@@ -28,6 +30,7 @@ function TallyHeader({
   isEditing,
   isEmpty,
   onSetEditing,
+  title = 'Score Tally',
 }: Props): JSX.Element {
   const style = useStyle(TallyHeaderStyles);
   const theme = useTheme();
@@ -37,6 +40,7 @@ function TallyHeader({
   const dispatch = useDispatch();
   const toggleSortOrder = useCallback(() => {
     dispatch(flipSortOrder());
+    void impactAsync(ImpactFeedbackStyle.Light);
   }, [dispatch]);
 
   const leftButton = isEmpty ? (
@@ -122,7 +126,7 @@ function TallyHeader({
       >
         {leftButton}
         <Text style={style.title} accessibilityRole="header">
-          Score Tally
+          {title}
         </Text>
         {rightButton}
       </View>

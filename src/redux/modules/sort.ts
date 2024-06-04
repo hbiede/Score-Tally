@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export type FlipSortOrderAction = Record<never, never>;
-
 type SortState = Readonly<{
   highScoreWins: boolean;
 }>;

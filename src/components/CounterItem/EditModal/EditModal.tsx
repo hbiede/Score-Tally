@@ -27,6 +27,7 @@ import useTheme from 'Components/ThemeProvider/useTheme';
 import EditModalStyles from './EditModal.style';
 import useReview from '../../../hooks/useReview';
 import { SymbolView } from 'expo-symbols';
+import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics';
 
 export const ModalState = {
   NONE: 'None',
@@ -73,6 +74,7 @@ function EditModal({
     } else {
       setValue('1');
     }
+    void impactAsync(ImpactFeedbackStyle.Light);
   }, [value]);
 
   useEffect(() => {
@@ -85,6 +87,7 @@ function EditModal({
     onSave(
       type === ModalState.SCORE ? `${numberPropValue + numberValue}` : value,
     );
+    void impactAsync(ImpactFeedbackStyle.Heavy);
     if (canAskForReview && numberPropValue > 0) {
       void askForReview();
     }

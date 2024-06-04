@@ -1,4 +1,5 @@
 import React, {
+  type JSX,
   useCallback,
   useEffect,
   useMemo,
@@ -32,18 +33,30 @@ import { AppReduxState } from 'Redux/modules/reducer';
 import { appendCounter } from 'Redux/modules/counters';
 import { Counter } from 'Statics/Types';
 import { SymbolView } from 'expo-symbols';
+import useTheme from 'Components/ThemeProvider/useTheme';
 
-function CounterScreen(): JSX.Element {
+const CounterScreen = (): JSX.Element => {
   const [isEditing, setIsEditing] = useState(false);
   const onSetEditing = useCallback(() => {
     setIsEditing(!isEditing);
     LayoutAnimation.easeInEaseOut();
   }, [isEditing]);
 
-  const { counters, highScoreWins } = useSelector((state: AppReduxState) => ({
-    counters: state.counters.counters,
-    highScoreWins: state.sort.highScoreWins,
-  }));
+  const { counters, highScoreWins } = useSelector(
+    (state: AppReduxState) => ({
+      counters: state.counters.counters,
+      highScoreWins: state.sort.highScoreWins,
+    }),
+    (prev, next) =>
+      prev.highScoreWins === next.highScoreWins &&
+      prev.counters.length === next.counters.length &&
+      prev.counters.every(
+        (c, i) =>
+          c.key === next.counters[i].key &&
+          c.name === next.counters[i].name &&
+          c.tally === next.counters[i].tally,
+      ),
+  );
 
   const listRef = useRef<FlatList<Counter>>(null);
   const [hasAdded, setHasAdded] = useState(false);
@@ -115,6 +128,7 @@ function CounterScreen(): JSX.Element {
   }, [counters, highScoreWins]);
 
   const style = useStyle(CounterScreenStyle);
+  const theme = useTheme();
   return (
     <View style={style.safeAreaContainer}>
       <StatusBar style={useColorScheme() === 'light' ? 'dark' : 'light'} />
@@ -129,18 +143,26 @@ function CounterScreen(): JSX.Element {
       />
       <View style={style.wrapper}>
         {counters.length === 0 ? (
-          <View style={style.emptyContainer}>
-            <TouchableOpacity
-              onPress={addCounterCallback}
-              style={style.addButton}
-              accessibilityLabel="Add a counter"
-            >
-              {Platform.select({
-                ios: <SymbolView name="plus" tintColor="#FFFFFF" size={30} />,
-                default: <MaterialIcons name="add" color="#FFFFFF" size={30} />,
-              })}
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={addCounterCallback}
+            style={style.addButton}
+            accessibilityLabel="Add a counter"
+          >
+            <SymbolView
+              name="plus"
+              resizeMode="scaleAspectFit"
+              size={40}
+              tintColor={theme.colors.primaryAccent}
+              weight="medium"
+              fallback={
+                <MaterialIcons
+                  name="add"
+                  color={theme.colors.primaryAccent}
+                  size={40}
+                />
+              }
+            />
+          </TouchableOpacity>
         ) : (
           <FlatList
             numColumns={Platform.OS === 'ios' && Platform.isPad ? 2 : 1}
@@ -156,7 +178,6 @@ function CounterScreen(): JSX.Element {
                 place={ranking[item.key]}
               />
             )}
-            ListHeaderComponent={<View style={{ height: 10 }} />}
             initialNumToRender={6}
             keyboardShouldPersistTaps="handled"
             ref={listRef}
@@ -165,6 +186,6 @@ function CounterScreen(): JSX.Element {
       </View>
     </View>
   );
-}
+};
 
 export default CounterScreen;

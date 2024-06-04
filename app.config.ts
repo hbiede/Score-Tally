@@ -9,7 +9,7 @@ const config: ExpoConfig = {
   slug: 'ScoreTally',
   privacy: 'public',
   platforms: ['ios', 'android'],
-  version: '1.1.0',
+  version: '1.2.0',
   orientation: 'default',
   icon: './assets/icon.png',
   splash: {
@@ -18,12 +18,13 @@ const config: ExpoConfig = {
     backgroundColor: '#0B9D20',
   },
   ios: {
-    buildNumber: '8',
-    bundleIdentifier: IS_INT_DEV
-      ? 'com.hbiede.intDev.ScoreTally'
-      : 'com.hbiede.ScoreTally',
+    bitcode: true,
+    buildNumber: '9',
+    bundleIdentifier: 'com.hbiede.ScoreTally',
+    config: {
+      usesNonExemptEncryption: false,
+    },
     infoPlist: {
-      ITSAppUsesNonExemptEncryption: false,
       NSCameraUsageDescription:
         'The camera is used to scan QR codes/barcodes, and to capture images for transactions.',
       UIBackgroundModes: ['fetch'],
@@ -31,17 +32,18 @@ const config: ExpoConfig = {
     supportsTablet: true,
     requireFullScreen: false,
     userInterfaceStyle: 'automatic',
+    privacyManifests: {
+      NSPrivacyTracking: false,
+    },
   },
   android: {
-    package: IS_INT_DEV
-      ? 'com.hbiede.intDev.ScoreTally'
-      : 'com.hbiede.ScoreTally',
+    package: 'com.hbiede.ScoreTally',
     softwareKeyboardLayoutMode: 'resize',
-    versionCode: 10100,
+    versionCode: 10200,
   },
   jsEngine: 'hermes',
   runtimeVersion: {
-    policy: 'sdkVersion',
+    policy: 'fingerprint',
   },
   updates: {
     url: 'https://u.expo.dev/9b0cc3a3-99d1-417b-8726-8fed445eb171',

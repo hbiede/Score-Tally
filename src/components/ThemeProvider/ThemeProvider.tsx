@@ -1,4 +1,4 @@
-import React, { ReactElement, PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
 import { useColorScheme } from 'react-native';
 
@@ -13,7 +13,7 @@ type Props = {
 const ThemeProvider: React.FC<PropsWithChildren<Props>> = ({
   children,
   theme,
-}): ReactElement => {
+}) => {
   const colorScheme = useColorScheme();
   const currentTheme = useMemo((): ThemeType => {
     if (theme === undefined) {

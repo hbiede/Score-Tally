@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 
 import { isAvailableAsync, requestReview } from 'expo-store-review';
 
-import { AppReduxState } from 'Redux/modules/reducer';
+import type { AppReduxState } from 'Redux/modules/reducer';
 import { ask, reviewed } from 'Redux/modules/review';
 
 const MS_PER_DAY = 3_600_000;

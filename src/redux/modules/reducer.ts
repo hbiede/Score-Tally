@@ -1,4 +1,4 @@
-import { combineReducers, Store, Reducer, AnyAction } from 'redux';
+import { combineReducers, Store, Reducer, Action } from 'redux';
 import {
   persistStore,
   persistReducer,
@@ -52,11 +52,10 @@ const createPersistedReducer = <S>(
     timeout: __DEV__ ? 10000 : 5000,
   };
 
-  const persistedReducer = persistReducer<S, AnyAction>(persistConfig, reducer);
+  const persistedReducer = persistReducer<S, Action>(persistConfig, reducer);
 
-  const store = configureStore<S & PersistPartial, AnyAction>({
+  const store = configureStore<S & PersistPartial, Action>({
     reducer: persistedReducer,
-    // @ts-expect-error - Return is not as the type expects
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: {

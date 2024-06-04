@@ -2,7 +2,7 @@ import { randomUUID } from 'expo-crypto';
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Counter } from 'Statics/Types';
+import type { Counter } from 'Statics/Types';
 
 export type AppendCounterAction = Partial<Counter> | undefined;
 

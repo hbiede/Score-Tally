@@ -1,5 +1,8 @@
-import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
-import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
+import type { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
+import type {
+  StrTextStyle,
+  StrViewStyle,
+} from 'Components/ThemeProvider/useStyle';
 
 type Style = {
   buttonContainer: StrViewStyle;
@@ -24,10 +27,10 @@ export default (theme: ThemeType): Style => ({
     width: '100%',
   },
   shadowContainer: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.accentBackground,
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: theme.currentTheme === 'light' ? 0.25 : 0.75,
-    shadowColor: '#000000',
+    shadowColor: theme.colors.accentBackground,
     shadowRadius: 8,
     zIndex: 1,
     elevation: 5,

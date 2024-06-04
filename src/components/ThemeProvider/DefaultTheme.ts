@@ -33,7 +33,7 @@ export const lightTheme: ThemeType = {
 export const darkTheme: ThemeType = {
   colors: {
     ...lightTheme.colors,
-    accentBackground: '#353636',
+    accentBackground: '#202021',
     background: '#000000',
     primary: '#0B9D20',
     secondary: '#FFFFFF',

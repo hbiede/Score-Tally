@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 import {
   AccessibilityActionEvent,
   LayoutAnimation,
@@ -47,15 +47,28 @@ const getPlaceString = (place: number): string => {
   }
 };
 
-function CounterItem({ data, index, isEditing, place }: Props): JSX.Element {
+const getPlaceA11yString = (place: number): string => {
+  switch (place) {
+    case 1:
+      return 'first place';
+    case 2:
+      return 'second place';
+    case 3:
+      return 'third place';
+    default:
+      return '';
+  }
+};
+
+const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const [currentModalState, setModalState] = useState<
     (typeof ModalState)[keyof typeof ModalState]
   >(ModalState.NONE);
   const [error, setError] = useState<string | null>(null);
-  const { playerCount } = useSelector((state: AppReduxState) => ({
-    playerCount: state.counters.counters.length,
-  }));
+  const playerCount = useSelector(
+    (state: AppReduxState) => state.counters.counters.length,
+  );
 
   const setScore = useCallback(
     (score = data.tally + 1) => {
@@ -83,6 +96,7 @@ function CounterItem({ data, index, isEditing, place }: Props): JSX.Element {
     if (playerCount > 1) {
       LayoutAnimation.easeInEaseOut();
     }
+    void impactAsync(ImpactFeedbackStyle.Heavy);
   }, [data, dispatch, playerCount]);
 
   const onBackPress = useCallback(() => {
@@ -188,19 +202,24 @@ function CounterItem({ data, index, isEditing, place }: Props): JSX.Element {
           onLongPress={onSetRequest}
           delayLongPress={300}
           accessible={!isEditing}
-          onAccessibilityTap={increment}
+          onAccessibilityTap={onSetRequest}
           onAccessibilityAction={onAccessibilityAction}
           accessibilityActions={[
             { name: 'increment' },
             { name: 'decrement' },
-            { name: 'longPress' },
-            { name: 'longpress' },
-            { name: 'magicTap' },
+            // iOS only
+            { name: 'magicTap', label: 'Add or subtract an arbitrary number' },
+            // Android only
+            { name: 'longpress', label: 'Add or subtract an arbitrary number' },
           ]}
           accessibilityRole="adjustable"
-          accessibilityLabel={`${data.name}. current count: ${Math.abs(
-            data.tally,
-          )}`}
+          accessibilityLabel={[
+            data.name,
+            `current score: ${Math.abs(data.tally)}`,
+            getPlaceA11yString(place),
+          ]
+            .filter((s) => !!s)
+            .join(', ')}
         >
           <View style={style.leftSectionWrapper}>
             {isEditing && playerCount > 1 && (
@@ -302,6 +321,6 @@ function CounterItem({ data, index, isEditing, place }: Props): JSX.Element {
       </View>
     </>
   );
-}
+};
 
 export default CounterItem;

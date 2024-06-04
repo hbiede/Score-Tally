@@ -1,7 +1,10 @@
 import { Dimensions, Platform } from 'react-native';
 
-import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
-import { StrTextStyle, StrViewStyle } from 'Components/ThemeProvider/useStyle';
+import type { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
+import type {
+  StrTextStyle,
+  StrViewStyle,
+} from 'Components/ThemeProvider/useStyle';
 
 type Style = {
   background: StrViewStyle;
@@ -19,7 +22,7 @@ const isPad = Platform.OS === 'ios' && Platform.isPad;
 const style = (theme: ThemeType): Style => ({
   background: {
     alignItems: 'center',
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.accentBackground,
     flexDirection: 'row',
     height: 100,
     justifyContent: 'space-between',
@@ -27,21 +30,21 @@ const style = (theme: ThemeType): Style => ({
   backgroundContainer: {
     borderColor:
       theme.currentTheme === 'light' ? theme.colors.border : undefined,
-    borderRadius: 20,
-    backgroundColor: theme.colors.background,
-    marginBottom: 12,
-    marginHorizontal: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
+    borderRadius: '20@ms0.2',
+    backgroundColor: theme.colors.accentBackground,
+    marginBottom: '12@ms0.2',
+    marginHorizontal: '8@ms0.2',
+    paddingHorizontal: '16@ms0.2',
+    paddingVertical: '4@ms0.2',
     width:
       Dimensions.get('window').width / (isPad ? 2 : 1) - 24 * (isPad ? 2 : 1.5),
 
-    shadowColor: '#000',
+    shadowColor: theme.colors.accentBackground,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.5,
     shadowRadius: 3.84,
     elevation: 5,
   },

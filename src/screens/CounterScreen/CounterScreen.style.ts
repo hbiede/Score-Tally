@@ -1,5 +1,5 @@
-import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
-import { StrViewStyle } from 'Components/ThemeProvider/useStyle';
+import type { ThemeType } from 'Components/ThemeProvider/DefaultTheme';
+import type { StrViewStyle } from 'Components/ThemeProvider/useStyle';
 
 type Style = {
   addButton: StrViewStyle;
@@ -12,11 +12,11 @@ type Style = {
 const style = (theme: ThemeType): Style => ({
   addButton: {
     backgroundColor: theme.colors.primary,
-    borderRadius: 4,
-    padding: 20,
+    borderRadius: '4@ms0.2',
+    padding: '20@ms0.2',
   },
   container: {
-    padding: 5,
+    marginTop: '16@ms0.2',
     width: '100%',
   },
   emptyContainer: {
@@ -25,16 +25,14 @@ const style = (theme: ThemeType): Style => ({
     justifyContent: 'center',
   },
   safeAreaContainer: {
-    backgroundColor: theme.colors.accentBackground,
+    backgroundColor: theme.colors.background,
     flex: 1,
-    height: '100%',
     width: '100%',
   },
   wrapper: {
     alignItems: 'center',
-    height: '100%',
+    flex: 1,
     justifyContent: 'center',
-    width: '100%',
   },
 });
 
