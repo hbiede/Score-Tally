@@ -8,6 +8,8 @@ type Style = {
   title: StrTextStyle;
 };
 
+export const ICON_SIZE = 30;
+
 export default (theme: ThemeType): Style => ({
   buttonContainer: {
     width: '40@ms0.2',

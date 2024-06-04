@@ -21,7 +21,7 @@ const reviewReducerSlice = createSlice({
     reviewed: (state) => ({
       ...state,
       hasReviewed: true,
-    })
+    }),
   },
 });
 

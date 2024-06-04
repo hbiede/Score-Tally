@@ -2,7 +2,8 @@ upcoming:
   version:
   date:
   dev:
-    -
+    - Update to Expo 51
+    - Update to ESLint 9
   user_facing:
     -
 

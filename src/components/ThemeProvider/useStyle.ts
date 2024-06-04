@@ -1,5 +1,10 @@
 import { useRef } from 'react';
-import { ScaledSheet, StringifiedStyles } from 'react-native-size-matters';
+import {
+  ScaledSheet,
+  ImageStyle as SizedImageStyle,
+  TextStyle as SizedTextStyle,
+  ViewStyle as SizedViewStyle,
+} from 'react-native-size-matters';
 import memoizeOne from 'memoize-one';
 import {
   ImageStyle,
@@ -8,6 +13,8 @@ import {
   TextStyle,
   ViewStyle,
 } from 'react-native';
+
+type StringifiedStyles = SizedImageStyle | SizedTextStyle | SizedViewStyle;
 
 import useTheme from 'Components/ThemeProvider/useTheme';
 import { ThemeType } from 'Components/ThemeProvider/DefaultTheme';

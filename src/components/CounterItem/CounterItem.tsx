@@ -25,6 +25,7 @@ import EditModal, {
   ModalState,
 } from 'Components/CounterItem/EditModal/EditModal';
 import { AppReduxState } from 'Redux/modules/reducer';
+import { SymbolView } from 'expo-symbols';
 
 type Props = {
   data: Counter;
@@ -46,7 +47,7 @@ const getPlaceString = (place: number): string => {
   }
 };
 
-const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
+function CounterItem({ data, index, isEditing, place }: Props): JSX.Element {
   const dispatch = useDispatch();
   const [currentModalState, setModalState] = useState<
     (typeof ModalState)[keyof typeof ModalState]
@@ -112,7 +113,6 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
 
   const onAccessibilityAction = useCallback(
     (event: AccessibilityActionEvent) => {
-      // eslint-disable-next-line default-case
       switch (event.nativeEvent.actionName) {
         case 'increment':
           dispatch(
@@ -134,6 +134,9 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
         case 'longPress':
         case 'magicTap':
           onSetRequest();
+          break;
+        default:
+          break;
       }
     },
     [data, dispatch, onSetRequest],
@@ -163,11 +166,11 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
           currentModalState === ModalState.NAME ||
           currentModalState === ModalState.SCORE
         }
-        onSave={(string: string) => {
+        onSave={(val: string) => {
           if (currentModalState === ModalState.SCORE) {
-            setScore(Number(string));
+            setScore(Number(val));
           } else {
-            onSetName(string);
+            onSetName(val);
           }
           setModalState(ModalState.NONE);
         }}
@@ -209,10 +212,20 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
                     onPress={() => move(true)}
                     style={[style.orderButton, index === 0 && { opacity: 0 }]}
                   >
-                    <MaterialIcons
-                      color={theme.colors.accentBackground}
-                      size={35}
-                      name="keyboard-arrow-up"
+                    <SymbolView
+                      name="chevron.up"
+                      resizeMode="scaleAspectFit"
+                      size={25}
+                      style={{ margin: 5 }}
+                      tintColor={theme.colors.accentBackground}
+                      weight="semibold"
+                      fallback={
+                        <MaterialIcons
+                          color={theme.colors.accentBackground}
+                          size={35}
+                          name="keyboard-arrow-up"
+                        />
+                      }
                     />
                   </TouchableOpacity>
                 )}
@@ -226,10 +239,20 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
                       index === playerCount - 1 && { opacity: 0 },
                     ]}
                   >
-                    <MaterialIcons
-                      color={theme.colors.accentBackground}
-                      size={35}
-                      name="keyboard-arrow-down"
+                    <SymbolView
+                      name="chevron.down"
+                      resizeMode="scaleAspectFit"
+                      size={25}
+                      style={{ margin: 5 }}
+                      tintColor={theme.colors.accentBackground}
+                      weight="semibold"
+                      fallback={
+                        <MaterialIcons
+                          color={theme.colors.accentBackground}
+                          size={35}
+                          name="keyboard-arrow-down"
+                        />
+                      }
                     />
                   </TouchableOpacity>
                 )}
@@ -258,10 +281,19 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
                 accessibilityLabel="Delete"
                 accessibilityHint="Tap to delete player"
               >
-                <MaterialIcons
-                  name="close"
-                  size={45}
-                  color={theme.colors.secondary}
+                <SymbolView
+                  name="trash.fill"
+                  resizeMode="scaleAspectFit"
+                  size={35}
+                  style={{ margin: 10 }}
+                  tintColor={theme.colors.secondary}
+                  fallback={
+                    <MaterialIcons
+                      name="close"
+                      size={45}
+                      color={theme.colors.secondary}
+                    />
+                  }
                 />
               </TouchableOpacity>
             )}
@@ -270,6 +302,6 @@ const CounterItem = ({ data, index, isEditing, place }: Props): JSX.Element => {
       </View>
     </>
   );
-};
+}
 
 export default CounterItem;

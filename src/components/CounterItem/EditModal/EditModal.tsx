@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  type JSX,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   AccessibilityInfo,
   findNodeHandle,
@@ -20,6 +26,7 @@ import useTheme from 'Components/ThemeProvider/useTheme';
 
 import EditModalStyles from './EditModal.style';
 import useReview from '../../../hooks/useReview';
+import { SymbolView } from 'expo-symbols';
 
 export const ModalState = {
   NONE: 'None',
@@ -37,7 +44,7 @@ type Props = {
   value?: string;
 };
 
-const EditModal = ({
+function EditModal({
   backButtonCallback = () => {},
   error,
   isVisible,
@@ -45,7 +52,7 @@ const EditModal = ({
   player,
   type = ModalState.NONE,
   value: propValue = '',
-}: Props): JSX.Element => {
+}: Props): JSX.Element {
   const style = useStyle(EditModalStyles);
   const theme = useTheme();
 
@@ -148,7 +155,18 @@ const EditModal = ({
                 accessible
                 accessibilityLabel="Back"
               >
-                <MaterialIcons name="chevron-left" style={style.headerButton} />
+                <SymbolView
+                  name="chevron.backward"
+                  resizeMode="scaleAspectFit"
+                  size={30}
+                  tintColor={theme.colors.primary}
+                  fallback={
+                    <MaterialIcons
+                      name="chevron-left"
+                      style={style.headerButton}
+                    />
+                  }
+                />
               </TouchableOpacity>
               <Text style={style.titleText} accessible={false}>
                 {type === ModalState.NAME ? 'Set Name' : 'Add to Score'}
@@ -159,7 +177,15 @@ const EditModal = ({
                 accessible
                 accessibilityLabel={`Confirm ${type}`}
               >
-                <MaterialIcons name="check" style={style.headerButton} />
+                <SymbolView
+                  name="checkmark"
+                  resizeMode="scaleAspectFit"
+                  size={30}
+                  tintColor={theme.colors.primary}
+                  fallback={
+                    <MaterialIcons name="check" style={style.headerButton} />
+                  }
+                />
               </TouchableOpacity>
             </View>
             {type === ModalState.SCORE && (
@@ -201,9 +227,18 @@ const EditModal = ({
                 accessibilityLabel="Invert value"
                 accessibilityHint="Multiply the score by -1"
               >
-                <Text style={style.invertButtonText} accessible={false}>
-                  +/-
-                </Text>
+                <SymbolView
+                  name="plus.forwardslash.minus"
+                  resizeMode="scaleAspectFit"
+                  size={30}
+                  tintColor={theme.colors.primary}
+                  weight="heavy"
+                  fallback={
+                    <Text style={style.invertButtonText} accessible={false}>
+                      +/-
+                    </Text>
+                  }
+                />
               </TouchableOpacity>
               <Text style={style.mathText}>
                 {numberPropValue} {numberValue < 0 ? '-' : '+'}{' '}
@@ -214,10 +249,19 @@ const EditModal = ({
                 onPress={onSaveCallback}
                 accessibilityLabel={`Confirm ${type}`}
               >
-                <MaterialIcons
-                  name="check"
+                <SymbolView
+                  name="checkmark"
+                  resizeMode="scaleAspectFit"
                   size={24}
-                  color={theme.colors.primaryAccent}
+                  tintColor={theme.colors.primaryAccent}
+                  weight="semibold"
+                  fallback={
+                    <MaterialIcons
+                      name="check"
+                      size={24}
+                      color={theme.colors.primaryAccent}
+                    />
+                  }
                 />
               </TouchableOpacity>
             </>
@@ -226,6 +270,6 @@ const EditModal = ({
       </Modal>
     </SafeAreaView>
   );
-};
+}
 
 export default EditModal;

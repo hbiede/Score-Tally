@@ -18,7 +18,7 @@ const config: ExpoConfig = {
     backgroundColor: '#0B9D20',
   },
   ios: {
-    buildNumber: '7',
+    buildNumber: '8',
     bundleIdentifier: IS_INT_DEV
       ? 'com.hbiede.intDev.ScoreTally'
       : 'com.hbiede.ScoreTally',
@@ -37,13 +37,8 @@ const config: ExpoConfig = {
       ? 'com.hbiede.intDev.ScoreTally'
       : 'com.hbiede.ScoreTally',
     softwareKeyboardLayoutMode: 'resize',
-    versionCode: 10001,
+    versionCode: 10100,
   },
-  assetBundlePatterns: [
-    'resources/**',
-    'submodules/wedgekit/resources/**',
-    'submodules/wedgekit/**/resources/**',
-  ],
   jsEngine: 'hermes',
   runtimeVersion: {
     policy: 'sdkVersion',
@@ -54,6 +49,13 @@ const config: ExpoConfig = {
   extra: {
     eas: {
       projectId: '9b0cc3a3-99d1-417b-8726-8fed445eb171',
+    },
+    updates: {
+      assetBundlePatterns: [
+        'resources/**',
+        'submodules/wedgekit/resources/**',
+        'submodules/wedgekit/**/resources/**',
+      ],
     },
   },
 };

@@ -19,7 +19,7 @@ import ThemeProvider from 'Components/ThemeProvider/ThemeProvider';
 
 import AppReducer from 'Redux/modules/reducer';
 
-const App = (): JSX.Element => {
+function App(): JSX.Element {
   const { persistor, store } = AppReducer;
   if (!(Platform.OS === 'ios' && Platform.isPad)) {
     supportsOrientationLockAsync(OrientationLock.PORTRAIT_UP).then(
@@ -40,6 +40,6 @@ const App = (): JSX.Element => {
       </PersistGate>
     </Provider>
   );
-};
+}
 
 export default App;

@@ -9,15 +9,23 @@ import { isAvailableAsync, requestReview } from 'expo-store-review';
 import { AppReduxState } from 'Redux/modules/reducer';
 import { ask, reviewed } from 'Redux/modules/review';
 
+const MS_PER_DAY = 3_600_000;
+
 /**
  * Used to track if you can ask for a store review, and allow you to trigger the action
  */
 export default (): [boolean, () => Promise<void>] => {
   const dispatch = useDispatch();
-  const { hasReviewed, lastAsked } = useSelector((s: AppReduxState) => ({
-    hasReviewed: s.review.hasReviewed,
-    lastAsked: new Date(s.review.lastAsked),
-  }));
+  const { hasReviewed, lastAsked } = useSelector(
+    (s: AppReduxState) => ({
+      hasReviewed: s.review.hasReviewed,
+      lastAsked: new Date(s.review.lastAsked),
+    }),
+    (prev, next) =>
+      prev.hasReviewed === next.hasReviewed &&
+      Math.abs(prev.lastAsked.getTime() - next.lastAsked.getTime()) <=
+        MS_PER_DAY,
+  );
 
   // Check if the user was last asked 30 or more days ago
   const canAsk =
@@ -46,10 +54,12 @@ export default (): [boolean, () => Promise<void>] => {
               {
                 text: 'Yes!',
                 onPress: () => {
-                  requestReview().then(() => {
-                    dispatch(reviewed());
-                    resolve();
-                  }).catch(reject);
+                  requestReview()
+                    .then(() => {
+                      dispatch(reviewed());
+                      resolve();
+                    })
+                    .catch(reject);
                 },
               },
             ]);

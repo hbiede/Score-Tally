@@ -31,8 +31,9 @@ import { TallyHeader } from 'Components/TallyHeader';
 import { AppReduxState } from 'Redux/modules/reducer';
 import { appendCounter } from 'Redux/modules/counters';
 import { Counter } from 'Statics/Types';
+import { SymbolView } from 'expo-symbols';
 
-const CounterScreen = (): JSX.Element => {
+function CounterScreen(): JSX.Element {
   const [isEditing, setIsEditing] = useState(false);
   const onSetEditing = useCallback(() => {
     setIsEditing(!isEditing);
@@ -134,7 +135,10 @@ const CounterScreen = (): JSX.Element => {
               style={style.addButton}
               accessibilityLabel="Add a counter"
             >
-              <MaterialIcons name="add" color="#FFFFFF" size={30} />
+              {Platform.select({
+                ios: <SymbolView name="plus" tintColor="#FFFFFF" size={30} />,
+                default: <MaterialIcons name="add" color="#FFFFFF" size={30} />,
+              })}
             </TouchableOpacity>
           </View>
         ) : (
@@ -161,6 +165,6 @@ const CounterScreen = (): JSX.Element => {
       </View>
     </View>
   );
-};
+}
 
 export default CounterScreen;

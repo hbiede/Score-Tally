@@ -43,7 +43,9 @@ const counterReducerSlice = createSlice({
         {
           ...defaultCounter,
           ...(action.payload || {}),
-          key: randomUUID(),
+          key:
+            randomUUID() ||
+            `${state.counters.length}-${Math.floor(Math.random() * 100)}`,
         },
       ],
     }),
