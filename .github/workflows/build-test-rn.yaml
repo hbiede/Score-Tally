@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'RN/**'
+      - 'build-test-rn.yaml'
 
 # Kill the workflow if the PR is updated with a new commit
 concurrency:

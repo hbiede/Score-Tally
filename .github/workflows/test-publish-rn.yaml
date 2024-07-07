@@ -5,6 +5,7 @@ on:
       - develop
     paths:
       - 'RN/**'
+      - 'test-publish-rn.yaml'
 
 defaults:
   run:

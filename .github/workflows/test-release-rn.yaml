@@ -7,7 +7,7 @@ on:
       - 'RN/**.ts'
       - 'RN/**.tsx'
       - 'RN/**.js'
-      - 'test-release.yaml'
+      - 'test-release-rn.yaml'
 
 defaults:
   run:
