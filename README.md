@@ -6,8 +6,8 @@ Score Keeping Made Easy!
 
 ## Screenshots
 
-| Platform | Image                                                                                                                    |
-|----------|--------------------------------------------------------------------------------------------------------------------------|
-| iPhone   | <img src="./iOS/ScoreTally/fastlane/screenshots/en-US/iPhone%2015%20Pro%20Max-2Game.png" height=250/>                    |
-| iPad     | <img src="./iOS/ScoreTally/fastlane/screenshots/en-US/iPad%20Pro(12.9-inch)%20(6th%20generation)-2Game.png" height=250/> |
-| Android  | <img src="./RN/screenshots/Android-List.png" height=250/>                                                                |
+| Platform | Image                                                                                                                       |
+|----------|-----------------------------------------------------------------------------------------------------------------------------|
+| iPhone   | <img src="./iOS/ScoreTally/fastlane/screenshots/en-US/iPhone%2015%20Pro%20Max-2Game.png" height=250/>                       |
+| iPad     | <img src="./iOS/ScoreTally/fastlane/screenshots/en-US/iPad%20Pro%20(12.9-inch)%20(6th%20generation)-2Game.png" height=250/> |
+| Android  | <img src="./RN/screenshots/Android-List.png" height=250/>                                                                   |
