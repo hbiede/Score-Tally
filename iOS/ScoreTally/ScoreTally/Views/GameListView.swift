@@ -10,12 +10,12 @@ import SwiftData
 
 struct GameListView: View {
     @Environment(\.modelContext) private var modelContext
-    
+
     @Query(sort: [SortDescriptor(\Game.createdDate, order: .reverse),
                   SortDescriptor(\Game.name, order: .forward)])
     private var games: [Game]
 
-    @State private var selectedGame: Int? = nil
+    @State private var selectedGame: Int?
     @State private var columnVisibility = NavigationSplitViewVisibility.all
 
     @State private var displayCreationPrompt = false
@@ -23,7 +23,9 @@ struct GameListView: View {
 
     @State private var searchText = ""
     private var searchResults: [Game] {
-        if !searchText.isEmpty, let filteredGames = try? games.filter(#Predicate { $0.name.localizedStandardContains(searchText) }) {
+        if !searchText.isEmpty, let filteredGames = try? games.filter(#Predicate {
+            $0.name.localizedStandardContains(searchText)
+        }) {
             filteredGames
         } else {
             games

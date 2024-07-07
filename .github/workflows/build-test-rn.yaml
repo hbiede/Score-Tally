@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: './RN'
+
 jobs:
   build:
     name: Build and Test

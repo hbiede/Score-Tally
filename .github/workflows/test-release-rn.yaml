@@ -9,6 +9,10 @@ on:
       - 'RN/**.js'
       - 'test-release.yaml'
 
+defaults:
+  run:
+    working-directory: './RN'
+
 jobs:
   release:
     name: Install and Release

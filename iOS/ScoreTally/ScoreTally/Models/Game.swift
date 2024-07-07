@@ -18,15 +18,15 @@ final class Game {
     var selected = false
 
     @Relationship(deleteRule: .cascade)
-    var _players: [Player] = [Player]()
+    var storedPlayerList: [Player] = [Player]()
     var players: [Player] {
-        self._players.sorted(by: { $0.creationDate < $1.creationDate })
+        self.storedPlayerList.sorted(by: { $0.creationDate < $1.creationDate })
     }
 
     var lowScoreWins: Bool
 
     var sortedPlayers: [Player] {
-        _players.sorted(by: lowScoreWins ? { $0 < $1 } : { $0 > $1 })
+        storedPlayerList.sorted(by: lowScoreWins ? { $0 < $1 } : { $0 > $1 })
     }
 
     init(name: String, lowScoreWins: Bool = false, createdDate: Date = .now) {
@@ -38,14 +38,14 @@ final class Game {
     func addPlayer(with name: String, score: Int = 0) {
         let player = Player(name: name, score: score)
         modelContext?.insert(player)
-        _players.append(player)
+        storedPlayerList.append(player)
     }
 
     func ranking(for player: Player) -> Int {
         Game.ranking(for: player, in: players, with: lowScoreWins)
     }
 
-    public class func ranking(for player: Player, in playerList: [Player], with lowScoreWins: Bool = false) -> Int {
+    public static func ranking(for player: Player, in playerList: [Player], with lowScoreWins: Bool = false) -> Int {
         if playerList.allSatisfy({ $0.score == 0 }) {
             return -1
         }
@@ -58,7 +58,7 @@ final class Game {
 }
 
 extension Game: Equatable {
-    static func ==(lhs: Game, rhs: Game) -> Bool {
+    static func == (lhs: Game, rhs: Game) -> Bool {
         lhs.name == rhs.name &&
         lhs.createdDate == rhs.createdDate &&
         lhs.players.count == rhs.players.count &&

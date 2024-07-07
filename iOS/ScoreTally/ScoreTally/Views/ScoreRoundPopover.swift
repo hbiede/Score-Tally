@@ -41,13 +41,7 @@ struct ScoreRoundPopover: View {
                         if let changeString = getRankingChange(for: index) {
                             Text("\(changeString)")
                         }
-                        if scores[index] < 0 {
-                            Text("\(players[index].score.formatted(.number)) - \(scores[index].magnitude.formatted(.number)) = \((players[index].score + scores[index]).formatted(.number))")
-                                .frame(minWidth: 150, alignment: .trailing)
-                        } else {
-                            Text("\(players[index].score.formatted(.number)) + \(scores[index].formatted(.number)) = \((players[index].score + scores[index]).formatted(.number))")
-                                .frame(minWidth: 150, alignment: .trailing)
-                        }
+                        Text(getScoreChangeText(for: players[index], with: scores[index]))
                     }
 
                     HStack {
@@ -62,13 +56,7 @@ struct ScoreRoundPopover: View {
                         VStack {
                             TextField("add-to-score-placeholder", value: $scores[index], format: .number)
                                 .textFieldStyle(.roundedBorder)
-                            if scores[index] < 0 {
-                                Text("\(players[index].score.formatted(.number)) - \(scores[index].magnitude.formatted(.number)) = \((players[index].score + scores[index]).formatted(.number))")
-                                    .font(.callout)
-                            } else {
-                                Text("\(players[index].score.formatted(.number)) + \(scores[index].formatted(.number)) = \((players[index].score + scores[index]).formatted(.number))")
-                                    .font(.callout)
-                            }
+                            Text(getScoreChangeText(for: players[index], with: scores[index]))
                         }
                     }
                 }
@@ -113,8 +101,20 @@ struct ScoreRoundPopover: View {
             return nil
         }
 
-        return String(format: NSLocalizedString("rank-change-tooltip-%@-%@", comment: "A string to indicate change in rank"),
+        return String(format: NSLocalizedString("rank-change-tooltip-%@-%@",
+                                                comment: "A string to indicate change in rank"),
                       current, newRankingString)
+    }
+
+    private func getScoreChangeText(for player: Player, with score: Int) -> String {
+        let oldScore = player.score.formatted(.number)
+        let newScore = (player.score + score).formatted(.number)
+        if score < 0 {
+            let subtractionAmount = score.magnitude.formatted(.number)
+            return "\(oldScore) - \(subtractionAmount) = \(newScore)"
+        } else {
+            return "\(oldScore) + \(score.formatted(.number)) = \(newScore)"
+        }
     }
 
     private func onSave() {

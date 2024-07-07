@@ -17,7 +17,7 @@ final class Player {
     var score: Int
     var creationDate: Date
 
-    @Relationship(inverse: \Game._players)
+    @Relationship(inverse: \Game.storedPlayerList)
     var game: Game?
 
     init(name: String, score: Int = 0) {
@@ -32,7 +32,7 @@ final class Player {
 }
 
 extension Player: Equatable {
-    static func ==(lhs: Player, rhs: Player) -> Bool {
+    static func == (lhs: Player, rhs: Player) -> Bool {
         lhs.name == rhs.name && lhs.score == rhs.score
     }
 }
@@ -41,11 +41,11 @@ extension Player: AdditiveArithmetic {
     static var zero: Player {
         Player(name: NSLocalizedString("default-player-name", comment: "Name for a default-created player"))
     }
-    
+
     static func + (lhs: Player, rhs: Player) -> Player {
         Player(name: lhs.name, score: lhs.score + rhs.score)
     }
-    
+
     static func + (lhs: Player, rhs: Int) -> Player {
         Player(name: lhs.name, score: lhs.score + rhs)
     }

@@ -6,6 +6,10 @@ on:
     paths:
       - 'RN/**'
 
+defaults:
+  run:
+    working-directory: './RN'
+
 jobs:
   publish:
     name: Install and Publish

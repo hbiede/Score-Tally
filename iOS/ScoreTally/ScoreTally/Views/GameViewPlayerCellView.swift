@@ -23,7 +23,7 @@ struct GameViewPlayerCellView: View {
     }
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: {}, label: {
             ViewThatFits(in: .horizontal) {
                 // Expanded single-line
                 HStack {
@@ -81,7 +81,7 @@ struct GameViewPlayerCellView: View {
                         .padding(.bottom)
                 }
             }
-        }
+        })
         .buttonStyle(.borderedProminent)
         .simultaneousGesture(
             LongPressGesture()
@@ -99,9 +99,9 @@ struct GameViewPlayerCellView: View {
             Section {
                 Button("delete-player-right-click-action") {
                     withAnimation {
-                        if let players = player.game?._players,
+                        if let players = player.game?.storedPlayerList,
                            let index = players.firstIndex(of: player) {
-                            player.game!._players.remove(at: index)
+                            player.game!.storedPlayerList.remove(at: index)
                         }
                         modelContext.delete(player)
                     }

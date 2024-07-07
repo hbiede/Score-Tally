@@ -17,4 +17,3 @@ func getRankingEmoji(for rank: Int, showLossOfPlace: Bool = false) -> String {
         return showLossOfPlace ? "❌" : ""
     }
 }
-

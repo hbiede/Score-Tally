@@ -1,0 +1,16 @@
+identifier_name:
+  min_length: # only min_length
+    error: 3 # only error
+  allowed_symbols: []
+  excluded: # excluded via string array
+    - app
+    - id
+    - URL
+    - url
+    - GlobalAPIKey
+reporter: "xcode"    
+
+
+excluded:
+- "**/ScoreTallyUITests.swift"
+- "**/SnapshotHelper.swift"

@@ -54,7 +54,6 @@ final class ScoreTallyUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    // swiftlint:disable function_body_length
     @MainActor
     func testSnapshots() throws {
 

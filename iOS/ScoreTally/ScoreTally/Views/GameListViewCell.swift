@@ -65,14 +65,14 @@ struct GameListViewCell: View {
     private func onDuplicate(with name: String) {
         let newGame = Game(name: name)
 
-        newGame._players = game.players.map { Player(name: $0.name, score: $0.score) }
-        newGame._players.forEach{ modelContext.insert($0) }
+        newGame.storedPlayerList = game.players.map { Player(name: $0.name, score: $0.score) }
+        newGame.storedPlayerList.forEach { modelContext.insert($0) }
 
         modelContext.insert(newGame)
     }
 
     private func onReset() {
-        game.players.forEach{ $0.score = 0 }
+        game.players.forEach { $0.score = 0 }
     }
 
     private func onShowDuplicate() {

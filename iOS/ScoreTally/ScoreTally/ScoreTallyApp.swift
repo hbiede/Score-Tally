@@ -12,7 +12,7 @@ import SwiftData
 struct ScoreTallyApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Game.self,
+            Game.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

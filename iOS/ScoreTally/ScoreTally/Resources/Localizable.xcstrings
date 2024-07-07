@@ -18,16 +18,6 @@
       },
       "shouldTranslate" : false
     },
-    "%@ - %@ = %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ - %2$@ = %3$@"
-          }
-        }
-      }
-    },
     "%@ %@" : {
       "localizations" : {
         "de" : {
@@ -82,16 +72,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
-          }
-        }
-      }
-    },
-    "%@ + %@ = %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ + %2$@ = %3$@"
           }
         }
       }

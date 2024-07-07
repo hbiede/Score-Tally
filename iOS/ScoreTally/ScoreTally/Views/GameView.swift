@@ -92,10 +92,10 @@ struct GameView: View {
         .navigationTitle(game.name)
         .fullScreenCover(isPresented: $showingScorePopover, onDismiss: {
             showingScorePopover = false
-        }) {
+        }, content: {
             ScoreRoundPopover(for: game.players)
                 .presentationCompactAdaptation(.fullScreenCover)
-        }
+        })
         .toolbar {
             Button(action: showAddPlayer) {
                 Label("add-player", systemImage: "plus")
