@@ -4,9 +4,9 @@ on:
     branches:
       - main
     paths:
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
+      - 'RN/**.ts'
+      - 'RN/**.tsx'
+      - 'RN/**.js'
       - 'test-release.yaml'
 
 jobs:

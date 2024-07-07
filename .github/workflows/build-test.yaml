@@ -1,5 +1,8 @@
 name: Build and Test
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'RN/**'
 
 # Kill the workflow if the PR is updated with a new commit
 concurrency:

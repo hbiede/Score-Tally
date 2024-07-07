@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "A20FDB75-D1BD-4136-AED0-1C4BA3C5DDD3",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Score Tally.xcodeproj",
+        "identifier" : "3E1468042C39020A00BA1C9C",
+        "name" : "ScoreTallyUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
