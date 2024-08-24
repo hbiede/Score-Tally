@@ -83,12 +83,6 @@ struct GameViewPlayerCellView: View {
             }
         })
         .buttonStyle(.borderedProminent)
-        .simultaneousGesture(
-            LongPressGesture()
-                .onEnded { _ in
-                    onEdit()
-                }
-        )
         .highPriorityGesture(
             TapGesture()
                 .onEnded { _ in
@@ -99,9 +93,9 @@ struct GameViewPlayerCellView: View {
             Section {
                 Button("delete-player-right-click-action") {
                     withAnimation {
-                        if let players = player.game?.storedPlayerList,
+                        if var players = player.game?.storedPlayerList,
                            let index = players.firstIndex(of: player) {
-                            player.game!.storedPlayerList.remove(at: index)
+                            players.remove(at: index)
                         }
                         modelContext.delete(player)
                     }

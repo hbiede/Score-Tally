@@ -48,6 +48,7 @@
 		3E7D827A2C3892FB006B36EB /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				GameEditPopover.swift,
 				GameListView.swift,
 				GameListViewCell.swift,
 				GameView.swift,

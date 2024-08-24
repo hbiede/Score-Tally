@@ -12,14 +12,21 @@ struct GameListViewCell: View {
 
     let game: Game
 
-    @State private var showDuplicationPrompt = false
+    @State private var showingEditPopover = false
+    @State private var showingDuplicationPrompt = false
     @State private var duplicationPromptText = ""
 
     var body: some View {
         VStack(alignment: .leading) {
             Text(game.name)
                 .font(.headline.weight(.semibold))
-            Text("\(game.createdDate, format: Date.FormatStyle(date: .numeric, time: .omitted))")
+
+            let dateString = game.createdDate.formatted(date: .numeric, time: .omitted)
+            if let winner = game.winner, winner.score > 0 || game.lowScoreWins {
+                Text("\(dateString) - Winner: \(winner.name)")
+            } else {
+                Text(dateString)
+            }
         }
         .accessibilityIdentifier(game.name)
         .accessibilityHint(
@@ -32,6 +39,8 @@ struct GameListViewCell: View {
             return .handled
         }
         .contextMenu {
+            Button("edit-game-right-click-action", action: onEdit)
+                .accessibilityIdentifier("edit-game-right-click-action")
             Button("delete-game-right-click-action", action: onDelete)
                 .accessibilityIdentifier("delete-game-right-click-action")
             Button("duplicate-game-right-click-action", action: onShowDuplicate)
@@ -39,7 +48,7 @@ struct GameListViewCell: View {
             Button("reset-game-right-click-action", action: onReset)
                 .accessibilityIdentifier("reset-game-right-click-action")
         }
-        .alert("duplicate-game-title", isPresented: $showDuplicationPrompt) {
+        .alert("duplicate-game-title", isPresented: $showingDuplicationPrompt) {
             TextField("duplicate-game-placeholder", text: $duplicationPromptText)
 
             Button("cancel", role: .cancel) {
@@ -50,10 +59,20 @@ struct GameListViewCell: View {
             }
             .disabled(duplicationPromptText.isEmpty)
         }
+        .fullScreenCover(isPresented: $showingEditPopover, onDismiss: {
+            showingEditPopover = false
+        }, content: {
+            GameEditPopover(for: game)
+                .presentationCompactAdaptation(.fullScreenCover)
+        })
     }
 
     private func cancelCreation() {
-        showDuplicationPrompt = false
+        showingDuplicationPrompt = false
+    }
+
+    private func onEdit() {
+            showingEditPopover = true
     }
 
     private func onDelete() {
@@ -65,8 +84,9 @@ struct GameListViewCell: View {
     private func onDuplicate(with name: String) {
         let newGame = Game(name: name)
 
-        newGame.storedPlayerList = game.players.map { Player(name: $0.name, score: $0.score) }
-        newGame.storedPlayerList.forEach { modelContext.insert($0) }
+        let newList = game.players.map { Player(name: $0.name, score: $0.score) }
+        newGame.storedPlayerList = newList
+        newList.forEach { modelContext.insert($0) }
 
         modelContext.insert(newGame)
     }
@@ -77,6 +97,6 @@ struct GameListViewCell: View {
 
     private func onShowDuplicate() {
         duplicationPromptText = ""
-        showDuplicationPrompt = true
+        showingDuplicationPrompt = true
     }
 }

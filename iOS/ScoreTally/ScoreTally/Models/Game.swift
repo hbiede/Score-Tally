@@ -10,23 +10,25 @@ import SwiftData
 
 @Model
 final class Game {
-    #Unique([\Game.name])
-    #Index([\Game.name, \.createdDate])
+    #Index<Game>([\.name, \.createdDate])
 
-    var name: String
-    var createdDate: Date
+    var name = ""
+    var createdDate = Date.now
     var selected = false
+    var lowScoreWins = false
 
     @Relationship(deleteRule: .cascade)
-    var storedPlayerList: [Player] = [Player]()
+    var storedPlayerList: [Player]? = [Player]()
     var players: [Player] {
-        self.storedPlayerList.sorted(by: { $0.creationDate < $1.creationDate })
+        self.storedPlayerList?.sorted(by: { $0.creationDate < $1.creationDate }) ?? []
     }
 
-    var lowScoreWins: Bool
-
     var sortedPlayers: [Player] {
-        storedPlayerList.sorted(by: lowScoreWins ? { $0 < $1 } : { $0 > $1 })
+        self.storedPlayerList?.sorted(by: lowScoreWins ? { $0 < $1 } : { $0 > $1 }) ?? []
+    }
+
+    var winner: Player? {
+        self.sortedPlayers.first
     }
 
     init(name: String, lowScoreWins: Bool = false, createdDate: Date = .now) {
@@ -38,7 +40,7 @@ final class Game {
     func addPlayer(with name: String, score: Int = 0) {
         let player = Player(name: name, score: score)
         modelContext?.insert(player)
-        storedPlayerList.append(player)
+        storedPlayerList?.append(player)
     }
 
     func ranking(for player: Player) -> Int {

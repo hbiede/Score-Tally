@@ -10,12 +10,11 @@ import SwiftData
 
 @Model
 final class Player {
-    #Unique([\Player.name, \.game])
-    #Index([\Player.name, \.creationDate])
+    #Index<Player>([\.name, \.creationDate])
 
-    var name: String
-    var score: Int
-    var creationDate: Date
+    var name = ""
+    var score = 0
+    var creationDate = Date.now
 
     @Relationship(inverse: \Game.storedPlayerList)
     var game: Game?

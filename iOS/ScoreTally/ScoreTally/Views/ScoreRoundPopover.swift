@@ -66,7 +66,7 @@ struct ScoreRoundPopover: View {
                     .keyboardShortcut("s", modifiers: .command)
                     .accessibilityIdentifier("save-round-button-title")
                     .disabled(scores.allSatisfy { $0 == 0 })
-                Button("cancel", role: .cancel, action: onSave)
+                Button("cancel", role: .cancel, action: onCancel)
                     .keyboardShortcut(.cancelAction)
                     .accessibilityIdentifier("cancel")
             }
@@ -117,9 +117,13 @@ struct ScoreRoundPopover: View {
         }
     }
 
+    private func onCancel() {
+        dismiss()
+    }
+
     private func onSave() {
-        players.enumerated().forEach { (index, player) in
-            player.increment(by: scores[index])
+        zip(players, scores).forEach { (player, score) in
+            player.increment(by: score)
         }
         dismiss()
     }
