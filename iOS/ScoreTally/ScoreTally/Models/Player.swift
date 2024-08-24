@@ -85,8 +85,16 @@ extension Player: Comparable {
     }
 }
 
+extension Player: Copyable {}
+
 extension Player: CustomStringConvertible {
     var description: String {
+        "\(name): \(score)"
+    }
+}
+
+extension Player: CustomDebugStringConvertible {
+    var debugDescription: String {
         "\(name): \(score)"
     }
 }

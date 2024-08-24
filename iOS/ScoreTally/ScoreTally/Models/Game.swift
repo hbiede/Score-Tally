@@ -75,3 +75,9 @@ extension Game: CustomStringConvertible {
         "\(name): \(players.map(\.description).formatted(.list(type: .and)))"
     }
 }
+
+extension Game: CustomDebugStringConvertible {
+    var debugDescription: String {
+        "\(name): \(players.map { "(\($0.name): \($0.score)" }.formatted(.list(type: .and)))"
+    }
+}

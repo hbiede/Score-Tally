@@ -24,11 +24,12 @@ struct GameListViewCell: View {
             let dateString = game.createdDate.formatted(date: .numeric, time: .omitted)
             if let winner = game.winner,
                // Only show if there is a clear winner
-               game.players.contains(where: { winner.score != $0.score }) &&
-                // Show if there is a high-score winner
-                (winner.score > 0 ||
-                  // or if it is a low-score winner and someone has a score
-                  (game.lowScoreWins && game.players.contains { $0.score > 0 })) {
+               game.players.allSatisfy({ $0 == winner || winner.score != $0.score }) &&
+                (game.lowScoreWins
+                    // Show if it is a low-score winner and someone has a score
+                    ? game.players.contains { $0.score > 0 }
+                    // Show if there is a high-score winner
+                    : winner.score > 0) {
                 Text("\(dateString) - Winner: \(winner.name)")
             } else {
                 Text(dateString)
