@@ -11,7 +11,6 @@
 		3E1468112C39022400BA1C9C /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E1468102C39021F00BA1C9C /* SnapshotHelper.swift */; };
 		3E7D82682C3892C4006B36EB /* ScoreTallyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7D82672C3892C4006B36EB /* ScoreTallyApp.swift */; };
 		3E7D826E2C3892C6006B36EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E7D826D2C3892C6006B36EB /* Assets.xcassets */; };
-		3E7D82712C3892C6006B36EB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E7D82702C3892C6006B36EB /* Preview Assets.xcassets */; };
 		3E7D829F2C38DA5F006B36EB /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3E7D829E2C38DA5F006B36EB /* Localizable.xcstrings */; };
 		3E7D82A12C38E196006B36EB /* Splash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E7D82A02C38E196006B36EB /* Splash.storyboard */; platformFilter = ios; };
 		3EC6A8142C3A05BE009EBA83 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3EC6A8132C3A05BE009EBA83 /* InfoPlist.xcstrings */; };
@@ -35,7 +34,6 @@
 		3E7D82642C3892C4006B36EB /* ScoreTally.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScoreTally.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E7D82672C3892C4006B36EB /* ScoreTallyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreTallyApp.swift; sourceTree = "<group>"; };
 		3E7D826D2C3892C6006B36EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3E7D82702C3892C6006B36EB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3E7D829E2C38DA5F006B36EB /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		3E7D82A02C38E196006B36EB /* Splash.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Splash.storyboard; sourceTree = "<group>"; };
 		3EC6A8122C3A037E009EBA83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -139,17 +137,8 @@
 				3E7D826D2C3892C6006B36EB /* Assets.xcassets */,
 				3E7D82A02C38E196006B36EB /* Splash.storyboard */,
 				3E7D829C2C38DA0A006B36EB /* Resources */,
-				3E7D826F2C3892C6006B36EB /* Preview Content */,
 			);
 			path = ScoreTally;
-			sourceTree = "<group>";
-		};
-		3E7D826F2C3892C6006B36EB /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				3E7D82702C3892C6006B36EB /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		3E7D829C2C38DA0A006B36EB /* Resources */ = {
@@ -259,7 +248,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E7D82712C3892C6006B36EB /* Preview Assets.xcassets in Resources */,
 				3EC6A8142C3A05BE009EBA83 /* InfoPlist.xcstrings in Resources */,
 				3E7D829F2C38DA5F006B36EB /* Localizable.xcstrings in Resources */,
 				3E7D826E2C3892C6006B36EB /* Assets.xcassets in Resources */,
@@ -488,8 +476,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreTally/ScoreTally.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_ASSET_PATHS = "ScoreTally/Helpers/SamplePreview.swift ScoreTally/Preview\\ Content";
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 69RV8YV62P;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -503,8 +490,8 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = Splash.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -543,8 +530,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreTally/ScoreTally.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_ASSET_PATHS = "ScoreTally/Helpers/SamplePreview.swift ScoreTally/Preview\\ Content";
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 69RV8YV62P;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -558,8 +544,8 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = Splash.storyboard;
 				INFOPLIST_KEY_UIStatusBarHidden = NO;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
