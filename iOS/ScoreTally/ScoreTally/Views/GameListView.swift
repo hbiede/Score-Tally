@@ -114,7 +114,11 @@ struct GameListView: View {
     private func deleteGames(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(games[index])
+                let game = games[index]
+
+                game.players.forEach { modelContext.delete($0) }
+
+                modelContext.delete(game)
             }
         }
     }

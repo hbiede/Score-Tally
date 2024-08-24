@@ -22,7 +22,13 @@ struct GameListViewCell: View {
                 .font(.headline.weight(.semibold))
 
             let dateString = game.createdDate.formatted(date: .numeric, time: .omitted)
-            if let winner = game.winner, winner.score > 0 || game.lowScoreWins {
+            if let winner = game.winner,
+               // Only show if there is a clear winner
+               game.players.contains(where: { winner.score != $0.score }) &&
+                // Show if there is a high-score winner
+                (winner.score > 0 ||
+                  // or if it is a low-score winner and someone has a score
+                  (game.lowScoreWins && game.players.contains { $0.score > 0 })) {
                 Text("\(dateString) - Winner: \(winner.name)")
             } else {
                 Text(dateString)
@@ -77,6 +83,8 @@ struct GameListViewCell: View {
 
     private func onDelete() {
         withAnimation {
+            game.players.forEach { modelContext.delete($0) }
+
             modelContext.delete(game)
         }
     }
