@@ -2,25 +2,37 @@
 
 # A list of devices you want to take the screenshots from
 devices([
- "iPad Pro (12.9-inch) (6th generation)",
- "iPhone 15 Pro Max",
- "iPhone SE (3rd generation)"
+ "iPad Pro 13-inch (M5)",
+ "iPhone 17 Pro",
+ "iPhone Duo"
 ])
 
 languages([
   "en-US",
+  "es-ES",
   "es-MX",
   "fr-FR",
+  "fr-CA",
   "de-DE",
   "it",
   "ja",
   "ru",
   "zh-Hans",
-  "zh-Hant"
+  "zh-Hant",
+  "hi",
+  "ko",
+  "nl-NL",
+  "pt-BR",
+  "pt-PT",
+  "ar-SA",
+  "he"
 ])
 
 # The name of the scheme which contains the UI Tests
 scheme("Snapshots")
+
+# Only run the screenshot test; a failure in any other UI test fails the whole language
+only_testing(["ScoreTallyUITests/ScoreTallyUITests/testSnapshots"])
 
 # Where should the resulting screenshots be stored?
 output_directory("./fastlane/screenshots")
@@ -36,3 +48,7 @@ launch_arguments(["reset_simulators"])
 
 # For more information about all available options run
 # fastlane action snapshot
+
+# Parallel testing clones the simulator ("Clone 2 of ...") and the UI test runner fails to launch on the clone
+xcargs("-parallel-testing-enabled NO")
+concurrent_simulators(false)

@@ -19,17 +19,33 @@ platform :ios do
   desc "Generate new localized screenshots"
   lane :screenshots do
     capture_screenshots(scheme: "Snapshots")
-    system("cp -r fastlane/screenshots/es-MX/ fastlane/screenshots/es-ES")
+    stash_iphone_duo_screenshots
     upload_to_app_store(skip_binary_upload: true,
                         skip_metadata: true,
                         overwrite_screenshots: true,
                         run_precheck_before_submit: false)
   end
-  
+
   lane :update_app_store do
+    stash_iphone_duo_screenshots
     upload_to_app_store(skip_binary_upload: true,
                         skip_metadata: false,
                         overwrite_screenshots: true,
                         run_precheck_before_submit: false)
+  end
+
+  # deliver (and the App Store Connect API) has no display type for iPhone Duo yet, and it cancels
+  # the whole upload when it finds a screenshot size it doesn't recognize. Move the Duo screenshots
+  # into their own folder so they can be uploaded by hand in App Store Connect.
+  private_lane :stash_iphone_duo_screenshots do
+    duo_screenshots = Dir.glob("screenshots/*/iPhone Duo-*.png")
+    unless duo_screenshots.empty?
+      FileUtils.rm_rf("screenshots_iphone_duo")
+      duo_screenshots.each do |path|
+        destination = File.join("screenshots_iphone_duo", File.basename(File.dirname(path)))
+        FileUtils.mkdir_p(destination)
+        FileUtils.mv(path, destination)
+      end
+    end
   end
 end

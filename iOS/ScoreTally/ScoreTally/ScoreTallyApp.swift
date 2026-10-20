@@ -1,6 +1,6 @@
 //
 // ScoreTallyApp
-// ScoreTally 
+// ScoreTally
 //
 // Created on 7/5/24
 //
@@ -10,23 +10,20 @@ import SwiftData
 
 @main
 struct ScoreTallyApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Game.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    /// The store can fail to open, such as when a migration fails, so this keeps the error to show instead of crashing
+    private let sharedModelContainer = Result { try ModelContainer.scoreTally() }
 
     var body: some Scene {
         WindowGroup {
-            GameListView()
+            switch sharedModelContainer {
+            case .success(let container):
+                GameListView()
+                    .modelContainer(container)
+            case .failure(let error):
+                StoreErrorView(error: error)
+            }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

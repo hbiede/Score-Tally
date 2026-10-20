@@ -1,1 +1,1 @@
-juego, noche de juegos, puntuación, puntuación, mantenimiento de la puntuación, puntuaciones, juegos
+juego,noche de juegos,puntuación,puntaje,puntos,marcador,juegos de mesa,juego de cartas,baraja

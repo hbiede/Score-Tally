@@ -1,0 +1,11 @@
+Neu in dieser Version:
+• Runden: Sehen Sie die Punkte jedes Spielers Runde für Runde als Tabelle oder wechseln Sie zu Verlauf, um im Diagramm zu verfolgen, wie die Führung wechselt
+• Jeder Spieler erhält seine eigene Farbe
+• „Bildschirm eingeschaltet lassen“ hält den Bildschirm während des Spiels wach
+• Fehler durch Schütteln oder ⌘Z widerrufen
+• Das Zurücksetzen eines Spiels oder eines Punktestands muss jetzt bestätigt werden
+• Spürbares Feedback, wenn sich Punkte ändern
+• Überarbeitetes Design mit Liquid Glass unter iOS 26
+• Unterstützung für das iPhone Duo: Halb aufgeklappt stehen die Punkte oben und die Steuerung unten
+• Punktgleiche Spieler teilen sich jetzt einen Platz, und Medaillen erscheinen erst, sobald gepunktet wurde
+• Verbesserte VoiceOver-Unterstützung

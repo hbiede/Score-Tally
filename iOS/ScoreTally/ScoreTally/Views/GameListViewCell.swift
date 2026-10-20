@@ -1,20 +1,25 @@
 //
 // GameListViewCell
-// ScoreTally 
+// ScoreTally
 //
 // Created on 7/5/24
 //
 
+import SwiftData
 import SwiftUI
 
 struct GameListViewCell: View {
     @Environment(\.modelContext) private var modelContext
 
     let game: Game
+    /// Opens a game, such as a copy once it's saved
+    let onSelect: (Game) -> Void
 
     @State private var showingEditPopover = false
     @State private var showingDuplicationPrompt = false
     @State private var duplicationPromptText = ""
+    @State private var showingResetConfirmation = false
+    @State private var showingDeleteConfirmation = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -22,86 +27,104 @@ struct GameListViewCell: View {
                 .font(.headline.weight(.semibold))
 
             let dateString = game.createdDate.formatted(date: .numeric, time: .omitted)
-            if let winner = game.winner,
-               // Only show if there is a clear winner
-               game.players.allSatisfy({ $0 == winner || winner.score != $0.score }) &&
-                (game.lowScoreWins
-                    // Show if it is a low-score winner and someone has a score
-                    ? game.players.contains { $0.score > 0 }
-                    // Show if there is a high-score winner
-                    : winner.score > 0) {
-                Text("\(dateString) - Winner: \(winner.name)")
+            if let winner = game.winner {
+                Text(.winner(dateString, winner.name))
             } else {
                 Text(dateString)
             }
         }
         .accessibilityIdentifier(game.name)
-        .accessibilityHint(
-            String(format: NSLocalizedString("game-list-item-a11y-hint-%@",
-                                             comment: "A11y hint for a game on the main game-selection screen"),
-                   game.sortedPlayers.map(\.name).formatted(.list(type: .and)))
-        )
+        .accessibilityHint(Text(.gameListItemA11YHint(game.playersByScore.map(\.name).formatted(.list(type: .and)))))
         .onKeyPress(keys: [.delete, .deleteForward]) { _ in
-            onDelete()
+            onShowDeleteConfirmation()
             return .handled
         }
+        // Not a destructive role, which would remove the row before the deletion is confirmed
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(action: onShowDeleteConfirmation) {
+                Label(.deleteGameRightClickAction, systemImage: "trash")
+            }
+            .tint(.red)
+        }
         .contextMenu {
-            Button("edit-game-right-click-action", action: onEdit)
+            Button(.editGameRightClickAction, action: onEdit)
                 .accessibilityIdentifier("edit-game-right-click-action")
-            Button("delete-game-right-click-action", action: onDelete)
+            Button(.deleteGameRightClickAction, role: .destructive, action: onShowDeleteConfirmation)
                 .accessibilityIdentifier("delete-game-right-click-action")
-            Button("duplicate-game-right-click-action", action: onShowDuplicate)
+            Button(.duplicateGameRightClickAction, action: onShowDuplicate)
                 .accessibilityIdentifier("duplicate-game-right-click-action")
-            Button("reset-game-right-click-action", action: onReset)
+            Button(.resetGameRightClickAction, action: onShowResetConfirmation)
                 .accessibilityIdentifier("reset-game-right-click-action")
+                .disabled(!game.canReset)
         }
-        .alert("duplicate-game-title", isPresented: $showingDuplicationPrompt) {
-            TextField("duplicate-game-placeholder", text: $duplicationPromptText)
+        .alert(.duplicateGameTitle, isPresented: $showingDuplicationPrompt) {
+            TextField(text: $duplicationPromptText) {
+                Text(.duplicateGamePlaceholder)
+            }
 
-            Button("cancel", role: .cancel) {
-                cancelCreation()
+            Button(.cancel, role: .cancel) {}
+            Button(.duplicateGameButtonTitle) {
+                onDuplicate(with: duplicationPromptText.trimmed)
             }
-            Button("duplicate-game-button-title") {
-                onDuplicate(with: duplicationPromptText)
-            }
-            .disabled(duplicationPromptText.isEmpty)
+            .disabled(duplicationPromptText.trimmed.isEmpty)
         }
-        .fullScreenCover(isPresented: $showingEditPopover, onDismiss: {
-            showingEditPopover = false
-        }, content: {
+        .confirmationDialog(
+            Text(.resetGameConfirmationTitle(game.name)),
+            isPresented: $showingResetConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(.resetGameConfirmationButton, role: .destructive, action: onReset)
+                .accessibilityIdentifier("reset-game-confirmation-button")
+            Button(.cancel, role: .cancel) {}
+        } message: {
+            Text(.resetGameConfirmationMessage)
+        }
+        .confirmationDialog(
+            Text(.deleteGameConfirmationTitle(game.name)),
+            isPresented: $showingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(.deleteConfirmationButton, role: .destructive, action: onDelete)
+                .accessibilityIdentifier("delete-game-confirmation-button")
+            Button(.cancel, role: .cancel) {}
+        } message: {
+            Text(.deleteGameConfirmationMessage)
+        }
+        .sheet(isPresented: $showingEditPopover) {
             GameEditPopover(for: game)
-                .presentationCompactAdaptation(.fullScreenCover)
-        })
-    }
-
-    private func cancelCreation() {
-        showingDuplicationPrompt = false
+                .presentationSizing(.form)
+        }
     }
 
     private func onEdit() {
-            showingEditPopover = true
+        showingEditPopover = true
     }
 
     private func onDelete() {
         withAnimation {
-            game.players.forEach { modelContext.delete($0) }
-
-            modelContext.delete(game)
+            game.delete()
         }
     }
 
+    private func onShowDeleteConfirmation() {
+        showingDeleteConfirmation = true
+    }
+
     private func onDuplicate(with name: String) {
-        let newGame = Game(name: name)
-
-        let newList = game.players.map { Player(name: $0.name, score: $0.score) }
-        newGame.storedPlayerList = newList
-        newList.forEach { modelContext.insert($0) }
-
-        modelContext.insert(newGame)
+        guard let copy = game.duplicate(named: name) else {
+            return
+        }
+        // Saving swaps the new game's temporary identifier for a permanent one before it can be selected
+        try? modelContext.save()
+        onSelect(copy)
     }
 
     private func onReset() {
-        game.players.forEach { $0.score = 0 }
+        game.reset()
+    }
+
+    private func onShowResetConfirmation() {
+        showingResetConfirmation = true
     }
 
     private func onShowDuplicate() {

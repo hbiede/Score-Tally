@@ -1,0 +1,1 @@
+spel,spelletjesavond,score,scores,scorebord,puntentelling,punten,bordspel,kaartspel,kaarten

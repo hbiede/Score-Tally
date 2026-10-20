@@ -1,0 +1,11 @@
+Nouveautés de cette version :
+• Tours : consultez les points de chaque joueur tour par tour dans un tableau, ou passez à Évolution pour voir sur un graphique qui prend les devants
+• Chaque joueur a maintenant sa propre couleur
+• « Garder l’écran allumé » empêche l’écran de se mettre en veille pendant la partie
+• Annulez une erreur en secouant l’appareil ou avec ⌘Z
+• La réinitialisation d’une partie ou du pointage d’un joueur demande maintenant une confirmation
+• Retour haptique lorsque les pointages changent
+• Design repensé avec Liquid Glass sur iOS 26
+• Prise en charge de l’iPhone Duo : à moitié plié, les pointages s’affichent en haut et les commandes en bas
+• Les joueurs à égalité partagent maintenant la même place, et les médailles apparaissent dès qu’on commence à compter les points
+• Meilleure prise en charge de VoiceOver

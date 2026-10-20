@@ -1,0 +1,11 @@
+Nouveautés de cette version :
+• Tours : consultez les points de chaque joueur tour par tour dans un tableau, ou passez à Évolution pour voir sur un graphique la tête changer de mains
+• Chaque joueur a désormais sa propre couleur
+• « Garder l’écran allumé » empêche l’écran de se mettre en veille pendant la partie
+• Annulez une erreur en secouant l’appareil ou avec ⌘Z
+• La réinitialisation d’une partie ou du score d’un joueur demande désormais une confirmation
+• Retour haptique lorsque les scores changent
+• Design repensé avec Liquid Glass sur iOS 26
+• Prise en charge de l’iPhone Duo : à moitié plié, les scores s’affichent en haut et les commandes en bas
+• Les joueurs à égalité partagent désormais la même place, et les médailles apparaissent dès que les scores commencent
+• Meilleure prise en charge de VoiceOver

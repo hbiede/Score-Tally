@@ -1,6 +1,6 @@
 //
 // GameEditPopover
-// ScoreTally 
+// ScoreTally
 //
 // Created on 2024-08-23
 //
@@ -15,6 +15,10 @@ struct GameEditPopover: View {
     @State var lowScoreWins: Bool
     @State var name: String
 
+    private var hasChanges: Bool {
+        name.trimmed != game.name || lowScoreWins != game.lowScoreWins
+    }
+
     init(for game: Game) {
         self.game = game
 
@@ -23,33 +27,44 @@ struct GameEditPopover: View {
     }
 
     var body: some View {
-        Form {
-            HStack {
-                Text("game-name-edit-label")
-                TextField("game-name-edit-placeholder", text: $name)
+        NavigationStack {
+            Form {
+                HStack {
+                    Text(.gameNameEditLabel)
+                    TextField(text: $name) {
+                        Text(.gameNameEditPlaceholder)
+                    }
                     .textFieldStyle(.roundedBorder)
+                }
+                Toggle(isOn: $lowScoreWins) {
+                    Text(.lowScoreWinsEditLabel)
+                }
             }
-            HStack {
-                Toggle("low-score-wins-edit-label", isOn: $lowScoreWins)
+            .navigationTitle(.editGameTitle)
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    DiscardCloseButton(hasChanges: hasChanges) {
+                        dismiss()
+                    }
+                        .keyboardShortcut(.cancelAction)
+                        .accessibilityIdentifier("cancel")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    ConfirmButton(title: .saveGameButtonTitle, action: onSave)
+                        .keyboardShortcut("s", modifiers: .command)
+                        .accessibilityIdentifier("save-game-button-title")
+                        .disabled(name.trimmed.isEmpty || !hasChanges)
+                }
             }
-
-            Section {
-                Button("save-game-button-title", action: onSave)
-                    .keyboardShortcut("s", modifiers: .command)
-                    .accessibilityIdentifier("save-game-button-title")
-                Button("cancel", role: .cancel, action: onCancel)
-                    .keyboardShortcut(.cancelAction)
-                    .accessibilityIdentifier("cancel")
-            }
+            .interactiveDismissDisabled(hasChanges)
         }
     }
 
-    private func onCancel() {
-        dismiss()
-    }
-
     private func onSave() {
-        game.name = name
+        game.name = name.trimmed
         game.lowScoreWins = lowScoreWins
         dismiss()
     }

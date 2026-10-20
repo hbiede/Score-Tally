@@ -1,6 +1,6 @@
 //
 // ContentView
-// ScoreTally 
+// ScoreTally
 //
 // Created on 7/5/24
 //
@@ -10,16 +10,18 @@ import SwiftData
 
 struct GameListView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.undoManager) private var undoManager
 
     @Query(sort: [SortDescriptor(\Game.createdDate, order: .reverse),
                   SortDescriptor(\Game.name, order: .forward)])
     private var games: [Game]
 
-    @State private var selectedGame: Int?
-    @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var selection: PersistentIdentifier?
+    @SceneStorage("selectedGame") private var storedSelection: Data?
 
-    @State private var displayCreationPrompt = false
-    @State private var createGameTitle = ""
+    @State private var showingNewGame = false
+
+    @AppStorage("keep-screen-on") private var keepScreenOn = true
 
     @State private var searchText = ""
     private var searchResults: [Game] {
@@ -32,95 +34,105 @@ struct GameListView: View {
         }
     }
 
+    private var selectedGame: Game? {
+        games.first { $0.persistentModelID == selection }
+    }
+
     var body: some View {
-        NavigationStack {
-            List {
+        NavigationSplitView {
+            List(selection: $selection) {
                 ForEach(Array(zip(searchResults.indices, searchResults)), id: \.1.id) { (index, game) in
-                    NavigationLink {
-                        GameView(with: game)
-                    } label: {
-                        GameListViewCell(game: game)
+                    NavigationLink(value: game.persistentModelID) {
+                        GameListViewCell(game: game, onSelect: select)
                     }
                     .accessibilityIdentifier("game-\(index)")
                 }
-                .onDelete(perform: deleteGames)
+            }
+            .overlay {
+                if games.isEmpty {
+                    ContentUnavailableView {
+                        Label(.noGamesTitle, systemImage: "list.number")
+                    } description: {
+                        Text(.noGamesDescription)
+                    } actions: {
+                        Button(.createGameTitle, action: displayPrompt)
+                            .buttonStyle(.borderedProminent)
+                    }
+                } else if searchResults.isEmpty {
+                    ContentUnavailableView.search(text: searchText)
+                }
             }
             .searchable(text: $searchText)
             .toolbar {
                 ToolbarItem {
                     Button(action: displayPrompt) {
-                        Label("add-game", systemImage: "plus")
+                        Label(.addGame, systemImage: "plus")
                     }
+                    .accessibilityInputLabels([Text(.addGame), Text(.inputLabelAdd), Text(.inputLabelNew)])
                     .accessibilityIdentifier("add-game")
                     .keyboardShortcut("n", modifiers: .command)
-                    .alert("create-game-title", isPresented: $displayCreationPrompt) {
-                        TextField("create-game-placeholder", text: $createGameTitle)
-
-                        Button("cancel", role: .cancel) {
-                            cancelCreation()
-                        }
-                        .accessibilityIdentifier("cancel")
-                        Button("create-game-button-title") {
-                            addGame(with: createGameTitle)
-                        }
-                        .accessibilityIdentifier("create-game-button-title")
-                        .disabled(createGameTitle.isEmpty)
-                    }
+                }
+                if #available(iOS 26, *) {
+                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
                 }
             }
-            .navigationTitle("app-title")
+            .sheet(isPresented: $showingNewGame) {
+                NewGameView(onCreate: select)
+                    .presentationSizing(.form)
+            }
+            .navigationTitle(.appTitle)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
-            .onAppear {
-                #if targetEnvironment(simulator)
-                selectedGame = games.firstIndex(where: { $0.selected })
-                #else
-                if games.isEmpty {
-                    displayPrompt()
-                } else {
-                    selectedGame = games.firstIndex(where: { $0.selected })
-                }
-                #endif
-            }
-            .onChange(of: searchText) {
-                selectedGame = nil
-            }
-            .onChange(of: selectedGame) {
-                if let selectedGame = selectedGame {
-                    games.forEach { $0.selected = false }
-                    games[selectedGame].selected = true
+            .copyableText(selectedGame?.description)
+        } detail: {
+            if let selectedGame {
+                GameView(with: selectedGame)
+                    .id(selectedGame.persistentModelID)
+            } else {
+                ContentUnavailableView {
+                    Label(.noGameSelectedTitle, systemImage: "list.number")
+                } description: {
+                    Text(.noGameSelectedDescription)
                 }
             }
+        }
+        .onAppear(perform: restoreSelection)
+        .onChange(of: selection) {
+            storedSelection = selection.flatMap { try? JSONEncoder().encode($0) }
+        }
+        .onChange(of: games) {
+            if selectedGame == nil {
+                selection = nil
+            }
+        }
+        .onChange(of: undoManager, initial: true) {
+            modelContext.undoManager = undoManager
+        }
+        // Set here rather than as each GameView appears and disappears, since switching games
+        // can show the new one before the old one disappears and turns the idle timer back on
+        .onChange(of: selectedGame != nil && keepScreenOn, initial: true) { _, keepAwake in
+            UIApplication.shared.isIdleTimerDisabled = keepAwake
         }
     }
 
     private func displayPrompt() {
-        createGameTitle = ""
-        displayCreationPrompt = true
+        showingNewGame = true
     }
 
-    private func cancelCreation() {
-        displayCreationPrompt = false
+    /// Opens `game`, such as one that was just created or duplicated
+    private func select(_ game: Game) {
+        selection = game.persistentModelID
     }
 
-    private func addGame(with title: String) {
-        displayCreationPrompt = false
-        withAnimation {
-            modelContext.insert(Game(name: title))
+    private func restoreSelection() {
+        guard selection == nil,
+              let storedSelection,
+              let storedID = try? JSONDecoder().decode(PersistentIdentifier.self, from: storedSelection),
+              games.contains(where: { $0.persistentModelID == storedID }) else {
+            return
         }
-    }
-
-    private func deleteGames(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                let game = games[index]
-
-                game.players.forEach { modelContext.delete($0) }
-
-                modelContext.delete(game)
-            }
-        }
+        selection = storedID
     }
 }
 

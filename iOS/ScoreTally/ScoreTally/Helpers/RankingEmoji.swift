@@ -1,19 +1,22 @@
 //
 // RankingEmoji
-// ScoreTally 
+// ScoreTally
 //
 // Created on 7/5/24
 //
 
-func getRankingEmoji(for rank: Int, showLossOfPlace: Bool = false) -> String {
-    switch rank {
-    case 0:
-        return "🥇"
-    case 1:
-        return "🥈"
-    case 2:
-        return "🥉"
-    default:
-        return showLossOfPlace ? "❌" : ""
+extension Int? {
+    /// The medal for a zero-based place, or a cross for anyone out of the medals when `showLossOfPlace` is set
+    func rankingEmoji(showLossOfPlace: Bool = false) -> String {
+        switch self {
+        case 0?:
+            "🥇"
+        case 1?:
+            "🥈"
+        case 2?:
+            "🥉"
+        default:
+            showLossOfPlace ? "❌" : ""
+        }
     }
 }

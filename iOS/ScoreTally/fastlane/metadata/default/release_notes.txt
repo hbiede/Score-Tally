@@ -1,0 +1,11 @@
+New in this version:
+• Rounds: see each player's points round by round in a score sheet, or switch to Race to watch the lead change hands on a chart
+• Every player gets their own color
+• Keep Screen On keeps your screen awake while you play
+• Undo mistakes with a shake or ⌘Z
+• Resetting a game or a player's score now asks you to confirm first
+• Feel a tap as scores change
+• A refreshed design with Liquid Glass on iOS 26
+• iPhone Duo support: half-fold to keep scores on top and controls on the bottom
+• Tied players now share a place, and medals appear once scoring starts
+• Improved VoiceOver support throughout

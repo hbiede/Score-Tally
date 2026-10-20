@@ -1,0 +1,11 @@
+Nieuw in deze versie:
+• Rondes: bekijk de punten van elke speler per ronde in een scoreblad, of schakel naar Verloop om op een grafiek te zien hoe de leiding wisselt
+• Elke speler krijgt een eigen kleur
+• ‘Houd scherm aan’ houdt je scherm wakker terwijl je speelt
+• Maak fouten ongedaan door te schudden of met ⌘Z
+• Voordat je een spel of de score van een speler opnieuw instelt, wordt nu om bevestiging gevraagd
+• Voel een tik wanneer de score verandert
+• Een vernieuwd ontwerp met Liquid Glass in iOS 26
+• Ondersteuning voor iPhone Duo: half dichtgevouwen staan de scores boven en de bediening onder
+• Spelers met een gelijke stand delen nu een plaats, en medailles verschijnen zodra er gescoord wordt
+• Verbeterde VoiceOver-ondersteuning in de hele app

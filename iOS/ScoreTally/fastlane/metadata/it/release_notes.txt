@@ -1,0 +1,11 @@
+Novità di questa versione:
+• Turni: visualizza i punti di ogni giocatore turno per turno in una tabella, oppure passa ad Andamento per vedere in un grafico come cambia il comando
+• Ogni giocatore ha il suo colore
+• Mantieni lo schermo acceso evita che lo schermo si spenga mentre giochi
+• Annulla gli errori scuotendo il dispositivo o con ⌘Z
+• Ora viene chiesta una conferma prima di azzerare una partita o il punteggio di un giocatore
+• Feedback aptico quando cambiano i punteggi
+• Design rinnovato con Liquid Glass su iOS 26
+• Supporto per iPhone Duo: piegato a metà, i punteggi restano in alto e i controlli in basso
+• I giocatori a pari punti ora condividono la stessa posizione e le medaglie compaiono quando inizia il punteggio
+• Supporto VoiceOver migliorato

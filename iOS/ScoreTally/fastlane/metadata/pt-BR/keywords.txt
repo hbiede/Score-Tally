@@ -1,0 +1,1 @@
+jogo,noite de jogos,pontos,pontuação,placar,marcador,tabuleiro,jogo de cartas,cartas,truco

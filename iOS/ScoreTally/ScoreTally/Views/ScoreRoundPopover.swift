@@ -1,6 +1,6 @@
 //
 // ScoreRoundPopover
-// ScoreTally 
+// ScoreTally
 //
 // Created on 7/5/24
 //
@@ -11,120 +11,134 @@ import SwiftUI
 struct ScoreRoundPopover: View {
     @Environment(\.dismiss) private var dismiss
 
-    private let players: [Player]
+    private let game: Game
+    private let lowScoreWins: Bool
 
+    // Kept from when the sheet opened, so re-sorting or a sync can't shift the rows under the points being typed
+    @State private var players: [Player]
     @State private var scores: [Int]
+    @FocusState private var focusedIndex: Int?
 
-    private var newPlayerScores: [Player] {
-        scores.enumerated().map { (index, score) in
-            players[index] + score
-        }
+    private var hasChanges: Bool {
+        scores.contains { $0 != 0 }
     }
 
-    init(for players: [Player]) {
-        self.players = players
-        scores = players.map { _ in 0 }
+    private var currentStandings: Standings {
+        Standings(scores: players.map(\.total), lowScoreWins: lowScoreWins)
+    }
+
+    private var newStandings: Standings {
+        Standings(scores: zip(players, scores).map { $0.total + $1 }, lowScoreWins: lowScoreWins)
+    }
+
+    /// Scores a round for `players`, listed in the order given so they match the game's grid
+    init(for game: Game, players: [Player]) {
+        self.game = game
+        lowScoreWins = game.lowScoreWins
+        _players = State(initialValue: players)
+        _scores = State(initialValue: players.map { _ in 0 })
     }
 
     var body: some View {
-        Form {
-            List(players.indices, id: \.self) { index in
-                ViewThatFits {
-                    HStack {
-                        Text("\(players[index].name) \(getRanking(for: index))")
-                            .frame(minWidth: 150, alignment: .leading)
-                            .accessibilityIdentifier("player-\(index)")
-                        TextField("add-to-score-placeholder", value: $scores[index], format: .number)
-                            .padding(.trailing)
-                            .textFieldStyle(.roundedBorder)
-                            .accessibilityIdentifier("player-input-\(index)")
-                        if let changeString = getRankingChange(for: index) {
-                            Text("\(changeString)")
-                        }
-                        Text(getScoreChangeText(for: players[index], with: scores[index]))
-                    }
+        let current = currentStandings
+        let updated = newStandings
+
+        NavigationStack {
+            Form {
+                ForEach(players.indices, id: \.self) { index in
+                    let ranking = current.place(of: players[index].total).rankingEmoji()
+                    let rankingChange = getRankingChange(for: index, from: current, to: updated)
 
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("\(players[index].name) \(getRanking(for: index))")
-                                .font(.headline)
-                                .frame(minWidth: 150, alignment: .leading)
-                                .accessibilityIdentifier("player-\(index)")
-                                .padding(.top)
-                            Text(getRankingChange(for: index) ?? "")
+                            // Separate texts keep the medal after the name in right-to-left languages,
+                            // where one string would put it before a Latin name
+                            HStack(spacing: 4) {
+                                Text(players[index].name)
+                                if !ranking.isEmpty {
+                                    Text(verbatim: ranking)
+                                }
+                            }
+                            .font(.headline)
+                            .frame(minWidth: 150, alignment: .leading)
+                            .accessibilityElement(children: .combine)
+                            .accessibilityIdentifier("player-\(index)")
+                            .padding(.top)
+                            if let rankingChange {
+                                Text(rankingChange)
+                            }
                         }
                         VStack {
-                            TextField("add-to-score-placeholder", value: $scores[index], format: .number)
-                                .textFieldStyle(.roundedBorder)
+                            scoreField(for: index)
                             Text(getScoreChangeText(for: players[index], with: scores[index]))
                         }
                     }
                 }
             }
-            Section {
-                Button("save-round-button-title", action: onSave)
-                    .keyboardShortcut("s", modifiers: .command)
-                    .accessibilityIdentifier("save-round-button-title")
-                    .disabled(scores.allSatisfy { $0 == 0 })
-                Button("cancel", role: .cancel, action: onCancel)
-                    .keyboardShortcut(.cancelAction)
-                    .accessibilityIdentifier("cancel")
+            .navigationTitle(.scoreRound)
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    DiscardCloseButton(hasChanges: hasChanges) {
+                        dismiss()
+                    }
+                        .keyboardShortcut(.cancelAction)
+                        .accessibilityIdentifier("cancel")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    ConfirmButton(title: .saveRoundButtonTitle, action: onSave)
+                        .keyboardShortcut("s", modifiers: .command)
+                        .accessibilityIdentifier("save-round-button-title")
+                }
             }
+            .interactiveDismissDisabled(hasChanges)
         }
     }
 
-    private func getRanking(for index: Int, showLossOfPlace: Bool = false) -> String {
-        if let game = players[index].game,
-           showLossOfPlace || players[index].score > 0 || game.lowScoreWins {
-            return getRankingEmoji(for: game.ranking(for: players[index]),
-                                   showLossOfPlace: showLossOfPlace)
+    private func scoreField(for index: Int) -> some View {
+        TextField(value: $scores[index], format: .number) {
+            Text(.addToScorePlaceholder)
         }
-        return ""
+        .textFieldStyle(.roundedBorder)
+        .keyboardType(.numbersAndPunctuation)
+        .focused($focusedIndex, equals: index)
+        .submitLabel(index < players.count - 1 ? .next : .done)
+        .onSubmit {
+            focusedIndex = index < players.count - 1 ? index + 1 : nil
+        }
+        // Every field shares one placeholder, so Voice Control would have no way to tell them apart
+        .accessibilityInputLabels([players[index].name])
+        .accessibilityIdentifier("player-input-\(index)")
     }
 
-    private func getRankingChange(for index: Int) -> String? {
-        if scores.allSatisfy({ $0 == scores.first! }) ||
-        (players[index].score == 0 &&
-         newPlayerScores[index].score == 0 &&
-         !(players[index].game?.lowScoreWins ?? false)) {
+    private func getRankingChange(for index: Int,
+                                  from current: Standings,
+                                  to new: Standings) -> LocalizedStringResource? {
+        let currentRanking = current.place(of: players[index].total).rankingEmoji(showLossOfPlace: true)
+        let newRanking = new.place(of: players[index].total + scores[index]).rankingEmoji(showLossOfPlace: true)
 
+        if currentRanking == newRanking {
             return nil
         }
 
-        let current = getRanking(for: index, showLossOfPlace: true)
-        let newRanking = Game.ranking(for: newPlayerScores[index],
-                                      in: newPlayerScores,
-                                      with: players.first!.game?.lowScoreWins ?? false)
-        let newRankingString = getRankingEmoji(for: newRanking, showLossOfPlace: true)
-
-        if current == newRankingString {
-            return nil
-        }
-
-        return String(format: NSLocalizedString("rank-change-tooltip-%@-%@",
-                                                comment: "A string to indicate change in rank"),
-                      current, newRankingString)
+        return .rankChangeTooltip(currentRanking, newRanking)
     }
 
-    private func getScoreChangeText(for player: Player, with score: Int) -> String {
-        let oldScore = player.score.formatted(.number)
-        let newScore = (player.score + score).formatted(.number)
+    private func getScoreChangeText(for player: Player, with score: Int) -> LocalizedStringResource {
+        let oldScore = player.total.formatted(.number)
+        let newScore = (player.total + score).formatted(.number)
         if score < 0 {
-            let subtractionAmount = score.magnitude.formatted(.number)
-            return "\(oldScore) - \(subtractionAmount) = \(newScore)"
+            return .scoreChangeSubtraction(oldScore, score.magnitude.formatted(.number), newScore)
         } else {
-            return "\(oldScore) + \(score.formatted(.number)) = \(newScore)"
+            return .scoreChangeAddition(oldScore, score.formatted(.number), newScore)
         }
-    }
-
-    private func onCancel() {
-        dismiss()
     }
 
     private func onSave() {
-        zip(players, scores).forEach { (player, score) in
-            player.increment(by: score)
-        }
+        // A sync can delete a player while the sheet is open, so skip any that are gone.
+        game.completeRound(with: zip(players, scores).filter { !$0.0.isDeleted })
         dismiss()
     }
 }
@@ -134,6 +148,6 @@ import SwiftData
 
 #Preview(traits: .sampleData) {
     @Previewable @Query var games: [Game] = [Game]()
-    ScoreRoundPopover(for: games.first!.players)
+    ScoreRoundPopover(for: games.first!, players: games.first!.players)
 }
 #endif

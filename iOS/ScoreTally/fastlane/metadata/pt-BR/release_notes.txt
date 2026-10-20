@@ -1,0 +1,11 @@
+Novidades desta versão:
+• Rodadas: veja os pontos de cada jogador rodada a rodada em uma planilha de pontos, ou mude para Evolução para acompanhar no gráfico as trocas de liderança
+• Cada jogador ganha sua própria cor
+• Manter tela ligada evita que a tela apague enquanto você joga
+• Desfaça erros sacudindo o aparelho ou com ⌘Z
+• Agora é preciso confirmar antes de redefinir um jogo ou a pontuação de um jogador
+• Sinta um toque quando a pontuação mudar
+• Um design renovado com Liquid Glass no iOS 26
+• Suporte ao iPhone Duo: dobre ao meio para manter a pontuação em cima e os controles embaixo
+• Jogadores empatados agora dividem a mesma posição, e as medalhas aparecem quando a pontuação começa
+• Suporte ao VoiceOver aprimorado em todo o app
