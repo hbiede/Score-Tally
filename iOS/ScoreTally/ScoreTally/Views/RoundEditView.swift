@@ -19,11 +19,15 @@ struct RoundEditView: View {
 
     // Kept from when the sheet opened, so a sync can't shift the rows under the points being typed
     @State private var players: [Player]
-    @State private var points: [Int?]
+    @State private var entries: [String]
     @State private var roundPendingDeletion: NumberedRound?
     @FocusState private var focusedIndex: Int?
 
     @ScaledMetric(relativeTo: .body) private var avatarSize = 28
+
+    private var points: [Int?] {
+        entries.map(\.scoreValue)
+    }
 
     private var hasChanges: Bool {
         points != original
@@ -37,7 +41,7 @@ struct RoundEditView: View {
         let original = players.map { round.points(for: $0) }
         self.original = original
         _players = State(initialValue: players)
-        _points = State(initialValue: original)
+        _entries = State(initialValue: original.map { $0.map(String.init(scoreEntry:)) ?? "" })
     }
 
     var body: some View {
@@ -90,19 +94,26 @@ struct RoundEditView: View {
                         .disabled(!hasChanges)
                 }
             }
+            .scoreEntryKeyboardToolbar(focusedIndex: $focusedIndex, count: players.count) { index in
+                entries[index] = entries[index].togglingScoreSign
+            }
             .interactiveDismissDisabled(hasChanges)
         }
     }
 
     private func pointsField(for index: Int) -> some View {
-        TextField(value: $points[index], format: .number, prompt: Text(.roundEditNotPlayedPlaceholder)) {
+        TextField(text: Binding {
+            entries[index]
+        } set: {
+            entries[index] = $0.sanitizedScoreEntry
+        }, prompt: Text(.roundEditNotPlayedPlaceholder)) {
             Text(players[index].name)
         }
         // Bordered like the Score Round sheet's fields, so the points read as editable rather than as plain values
         .textFieldStyle(.roundedBorder)
         .multilineTextAlignment(.trailing)
         .monospacedDigit()
-        .keyboardType(.numbersAndPunctuation)
+        .keyboardType(.numberPad)
         .frame(maxWidth: 100)
         .focused($focusedIndex, equals: index)
         .submitLabel(index < players.count - 1 ? .next : .done)

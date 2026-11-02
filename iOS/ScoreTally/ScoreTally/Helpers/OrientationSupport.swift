@@ -23,7 +23,7 @@ extension UIDevice {
         var systemInfo = utsname()
         uname(&systemInfo)
         return withUnsafeBytes(of: &systemInfo.machine) { buffer in
-            String(decoding: buffer.prefix { $0 != 0 }, as: UTF8.self)
+            String(bytes: buffer.prefix { $0 != 0 }, encoding: .utf8) ?? ""
         }
     }
 

@@ -16,8 +16,12 @@ struct ScoreRoundPopover: View {
 
     // Kept from when the sheet opened, so re-sorting or a sync can't shift the rows under the points being typed
     @State private var players: [Player]
-    @State private var scores: [Int]
+    @State private var entries: [String]
     @FocusState private var focusedIndex: Int?
+
+    private var scores: [Int] {
+        entries.map { $0.scoreValue ?? 0 }
+    }
 
     private var hasChanges: Bool {
         scores.contains { $0 != 0 }
@@ -36,10 +40,11 @@ struct ScoreRoundPopover: View {
         self.game = game
         lowScoreWins = game.lowScoreWins
         _players = State(initialValue: players)
-        _scores = State(initialValue: players.map { _ in 0 })
+        _entries = State(initialValue: players.map { _ in "" })
     }
 
     var body: some View {
+        let scores = self.scores
         let current = currentStandings
         let updated = newStandings
 
@@ -47,7 +52,7 @@ struct ScoreRoundPopover: View {
             Form {
                 ForEach(players.indices, id: \.self) { index in
                     let ranking = current.place(of: players[index].total).rankingEmoji()
-                    let rankingChange = getRankingChange(for: index, from: current, to: updated)
+                    let rankingChange = getRankingChange(for: index, scores: scores, from: current, to: updated)
 
                     HStack {
                         VStack(alignment: .leading) {
@@ -93,16 +98,23 @@ struct ScoreRoundPopover: View {
                         .accessibilityIdentifier("save-round-button-title")
                 }
             }
+            .scoreEntryKeyboardToolbar(focusedIndex: $focusedIndex, count: players.count) { index in
+                entries[index] = entries[index].togglingScoreSign
+            }
             .interactiveDismissDisabled(hasChanges)
         }
     }
 
     private func scoreField(for index: Int) -> some View {
-        TextField(value: $scores[index], format: .number) {
+        TextField(text: Binding {
+            entries[index]
+        } set: {
+            entries[index] = $0.sanitizedScoreEntry
+        }) {
             Text(.addToScorePlaceholder)
         }
         .textFieldStyle(.roundedBorder)
-        .keyboardType(.numbersAndPunctuation)
+        .keyboardType(.numberPad)
         .focused($focusedIndex, equals: index)
         .submitLabel(index < players.count - 1 ? .next : .done)
         .onSubmit {
@@ -114,6 +126,7 @@ struct ScoreRoundPopover: View {
     }
 
     private func getRankingChange(for index: Int,
+                                  scores: [Int],
                                   from current: Standings,
                                   to new: Standings) -> LocalizedStringResource? {
         let currentRanking = current.place(of: players[index].total).rankingEmoji(showLossOfPlace: true)

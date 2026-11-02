@@ -22,6 +22,8 @@
 		3EF1A0252EA1000000000000 /* MigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF1A0242EA1000000000000 /* MigrationTests.swift */; };
 		3EF1A0272EA1000000000000 /* RoundEditingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF1A0262EA1000000000000 /* RoundEditingTests.swift */; };
 		3EF1A0292EA1000000000000 /* GameStatsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF1A0282EA1000000000000 /* GameStatsTests.swift */; };
+		3EF1A02B2EA1000000000000 /* ResetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF1A02A2EA1000000000000 /* ResetTests.swift */; };
+		3EF1A02D2EA1000000000000 /* ScoreFieldTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF1A02C2EA1000000000000 /* ScoreFieldTextTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,12 +64,15 @@
 		3EF1A0242EA1000000000000 /* MigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationTests.swift; sourceTree = "<group>"; };
 		3EF1A0262EA1000000000000 /* RoundEditingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundEditingTests.swift; sourceTree = "<group>"; };
 		3EF1A0282EA1000000000000 /* GameStatsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatsTests.swift; sourceTree = "<group>"; };
+		3EF1A02A2EA1000000000000 /* ResetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetTests.swift; sourceTree = "<group>"; };
+		3EF1A02C2EA1000000000000 /* ScoreFieldTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreFieldTextTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		3E7D827A2C3892FB006B36EB /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AddToScoreSheet.swift,
 				GameEditPopover.swift,
 				GameListView.swift,
 				GameListViewCell.swift,
@@ -107,6 +112,7 @@
 				PlayerColor.swift,
 				RankingEmoji.swift,
 				SamplePreview.swift,
+				ScoreFieldText.swift,
 				StringTrimming.swift,
 				SystemStyles.swift,
 			);
@@ -210,6 +216,8 @@
 				3EF1A0262EA1000000000000 /* RoundEditingTests.swift */,
 				3EF1A0032EA1000000000000 /* StandingsTests.swift */,
 				3EF1A0282EA1000000000000 /* GameStatsTests.swift */,
+				3EF1A02A2EA1000000000000 /* ResetTests.swift */,
+				3EF1A02C2EA1000000000000 /* ScoreFieldTextTests.swift */,
 			);
 			path = ScoreTallyTests;
 			sourceTree = "<group>";
@@ -410,6 +418,8 @@
 				3EF1A0272EA1000000000000 /* RoundEditingTests.swift in Sources */,
 				3EF1A0052EA1000000000000 /* StandingsTests.swift in Sources */,
 				3EF1A0292EA1000000000000 /* GameStatsTests.swift in Sources */,
+				3EF1A02B2EA1000000000000 /* ResetTests.swift in Sources */,
+				3EF1A02D2EA1000000000000 /* ScoreFieldTextTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,7 +610,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreTally/ScoreTally.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_WARN_PEDANTIC = YES;
@@ -620,7 +630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hbiede.ScoreTally;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -654,7 +664,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = ScoreTally/ScoreTally.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_WARN_PEDANTIC = YES;
@@ -674,7 +684,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hbiede.ScoreTally;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

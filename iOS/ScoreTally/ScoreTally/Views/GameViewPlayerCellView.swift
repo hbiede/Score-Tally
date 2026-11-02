@@ -20,8 +20,7 @@ struct GameViewPlayerCellView: View {
     @State private var leadsTaken = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var showingCustomIncrementMenu = false
-    @State private var addingScore = 0
+    @State private var showingAddToScoreSheet = false
 
     @State private var showingEditSheet = false
     @State private var showingResetConfirmation = false
@@ -146,7 +145,7 @@ struct GameViewPlayerCellView: View {
                     incrementMenuButton(for: increment)
                 }
                 Button(.incrementByCustomAmountRightClickButton) {
-                    addCustomScore()
+                    showingAddToScoreSheet = true
                 }
             }, primaryAction: {
                 player.increment()
@@ -175,20 +174,9 @@ struct GameViewPlayerCellView: View {
         } message: {
             Text(.deletePlayerConfirmationMessage)
         }
-        .alert(.addToScoreTitle, isPresented: $showingCustomIncrementMenu) {
-            TextField(value: $addingScore, format: .number) {
-                Text(.addToScorePlaceholder)
-            }
-            .keyboardType(.numbersAndPunctuation)
-
-            Button(.cancel, role: .cancel) {
-                showingCustomIncrementMenu = false
-            }
-            Button(.addToScoreButtonTitle) {
-                withAnimation {
-                    player.increment(by: addingScore)
-                }
-            }
+        .sheet(isPresented: $showingAddToScoreSheet) {
+            AddToScoreSheet(for: player)
+                .presentationSizing(.form)
         }
         .confirmationDialog(
             Text(.resetScoreConfirmationTitle(player.name)),
@@ -229,11 +217,6 @@ struct GameViewPlayerCellView: View {
             .animation(.snappy, value: player.total)
     }
 
-    private func addCustomScore() {
-        showingCustomIncrementMenu = true
-        addingScore = 0
-    }
-
     private func incrementMenuButton(for increment: Int) -> some View {
         Button(.incrementByRightClickButton(increment)) {
             player.increment(by: increment)
@@ -265,7 +248,7 @@ private struct MedalCelebration {
 
 /// A card tinted in the player's color that shrinks while pressed, outlined while they lead
 private struct PlayerCardButtonStyle: ButtonStyle {
-    static let shadowBlur: CGFloat = 4
+    nonisolated static let shadowBlur: CGFloat = 4
     static let cornerRadius: CGFloat = 20
 
     let color: Color

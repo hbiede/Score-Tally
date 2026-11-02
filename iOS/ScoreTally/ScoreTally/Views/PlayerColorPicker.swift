@@ -44,7 +44,10 @@ struct PlayerColorPicker: View {
         } label: {
             Circle()
                 .fill(color.color)
-                .modifier(SelectionMarks(color: color.color, isSelected: isSelected, size: swatchSize, ringInset: ringInset))
+                .modifier(SelectionMarks(color: color.color,
+                                         isSelected: isSelected,
+                                         size: swatchSize,
+                                         ringInset: ringInset))
         }
         // Borderless so each swatch takes its own taps inside a form row
         .buttonStyle(.borderless)
@@ -62,7 +65,10 @@ struct PlayerColorPicker: View {
                                accessibilityLabel: String(localized: .playerColorCustom)) { color in
             selection = .custom(color)
         }
-        .modifier(SelectionMarks(color: selection.color, isSelected: custom != nil, size: swatchSize, ringInset: ringInset))
+        .modifier(SelectionMarks(color: selection.color,
+                                 isSelected: custom != nil,
+                                 size: swatchSize,
+                                 ringInset: ringInset))
     }
 }
 

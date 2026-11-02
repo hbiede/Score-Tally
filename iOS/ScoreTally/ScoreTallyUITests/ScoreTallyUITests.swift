@@ -338,7 +338,11 @@ final class ScoreTallyUITests: XCTestCase {
         for (index, value) in points.enumerated() {
             let field = app.textFields["player-input-\(index)"]
             field.tap()
-            field.clearAndType(String(value), in: app)
+            // The number pad has no minus key, so negatives get their sign from the keyboard toolbar
+            field.clearAndType(String(value.magnitude), in: app)
+            if value < 0 {
+                app.buttons["toggle-score-sign"].tap()
+            }
         }
         app.buttons["save-round-button-title"].tap()
     }

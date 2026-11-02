@@ -121,8 +121,7 @@ struct RoundTableView: View {
                             earlierRow(players: players, columnWidth: columnWidth)
                         }
                         ForEach(Array(rounds.enumerated()), id: \.element.id) { index, round in
-                            roundRow(for: round,
-                                     number: index + 1,
+                            roundRow(for: NumberedRound(round: round, number: index + 1),
                                      runningTotals: runningTotals.map { $0[index] },
                                      players: players,
                                      columnWidth: columnWidth,
@@ -226,16 +225,16 @@ extension RoundTableView {
         .accessibilityIdentifier("round-earlier")
     }
 
-    private func roundRow(for round: Round,
-                          number: Int,
+    private func roundRow(for selection: NumberedRound,
                           runningTotals: [Int],
                           players: [Player],
                           columnWidth: CGFloat,
                           followsEarlierRow: Bool) -> some View {
+        let round = selection.round
+        let number = selection.number
         let points = players.map { round.points(for: $0) }
         let standings = Standings(scores: points.compactMap { $0 }, lowScoreWins: game.lowScoreWins)
         let isBest = points.map { $0.map { standings.place(of: $0) == 0 } ?? false }
-        let selection = NumberedRound(round: round, number: number)
 
         return Button {
             editingRound = selection

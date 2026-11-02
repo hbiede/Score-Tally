@@ -35,6 +35,10 @@ struct GameStats<PlayerID: Hashable> {
         let player: PlayerID
         let fromRank: Int
         let toRank: Int
+
+        var shouldDisplay: Bool {
+            abs(fromRank - toRank) > 1
+        }
     }
 
     /// The player whose round scores strayed least from their average
@@ -258,7 +262,7 @@ struct GameStats<PlayerID: Hashable> {
             }
             biggest = Climb(player: player, fromRank: lowest, toRank: now)
         }
-        return biggest
+        return biggest?.shouldDisplay == true ? biggest : nil
     }
 
     /// The steadiest player among those with enough rounds, when there's more than one to compare
